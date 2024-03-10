@@ -6,7 +6,7 @@ var defaultX,defaultY = 0;
 const speed = { x: 0, y: 0 };
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
-    let app = new PIXI.Application({
+    app = new PIXI.Application({
         width: 1600,         // default: 800
         height: 1600,        // default: 600
         antialias: true,    // default: false
@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     shuttle.anchor.set(0.5, 0.5);
     defaultX = app.renderer.width / 2;
     defaultY = app.renderer.height - (shuttle.height/2);
-    shuttle.x = defaultX;
-    shuttle.y = defaultY;
+    shuttle.x = 800; //defaultX;
+    shuttle.y = 800; //defaultY;
     console.log(shuttle.x,shuttle.y);
     const gravity = 0.98;
 
@@ -58,9 +58,13 @@ document.addEventListener('DOMContentLoaded', () => {
        // Rotate sprite based on original degree value minus offset
        shuttle.rotation = angleInRadians;
     });
-    
-      
 
+    try {
+      createLand();
+    } catch (error) {
+      console.error(error);
+    }
+   
   
    } else {
      console.error("Could not find the '#pixi-container' element.");
