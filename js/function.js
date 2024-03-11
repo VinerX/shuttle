@@ -80,12 +80,18 @@ function runFunction() {
   function createLand(){
     let land = new PIXI.Graphics();
     
+    //Переворачивает y
+    function rY(y){
+      return app.renderer.height-y
+    }
+
+
     class Point{
       x;
       y;
       constructor(x,y) {
         this.x=x;
-        this.y=app.renderer.height-y;
+        this.y=rY(y);
       } 
       
     }
@@ -102,22 +108,99 @@ function runFunction() {
       });
       return level;
     }
-
+    
     class Land{
-      static firstLevelLand = levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
+      static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
       
       
       level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
       points = this.level.concat( [new Point(app.renderer.width,0)] );
+      indicator = new PIXI.Graphics();
       
-      
-
+      //Рисую линии
       drawAll(){
         land.moveTo(0,app.renderer.height);
         this.points.forEach((p) => land.lineTo(p.x,p.y) );
+        this.points.forEach(p => {
+          console.log("Point",p.x,rY(p.y));
+        });
+      }
+
+      // Ищу Y, который скорее всего не задан точкой.
+      findPointY(x){
+        let nearLeft = this.points.at(0);
+        let nearRight = this.points.at(-1);
         
+        this.points.forEach(p => {
+          
+          if (p.x<x){
+            if (p.x>=nearLeft.x){
+              nearLeft = p;
+            }
+          }
+          else{
+            if (p.x<=nearRight.x){
+              nearRight = p;
+            }
+          }
+        });
+
+        let y;
+        //Плато
+        if (nearRight.y==nearLeft.y){
+          y = rY(nearLeft.y)
+          console.log( rY(y))
+        }
+        else {
+          //Спуск
+          
+          if (nearLeft.y<=nearRight.y){
+            //console.log("Спуск")
+            y = ( rY(nearLeft.y)-rY(nearRight.y) ) * Math.abs(nearRight.x-x) / Math.abs(nearRight.x-nearLeft.x)+rY(nearRight.y);
+            //console.log(rY(nearLeft.y)," ", Math.abs(nearRight.x-x)," ",Math.abs(nearRight.x-nearLeft.x));
+          }
+          //подъем
+          else{
+            //console.log("Подъем")
+            y = ( rY(nearRight.y)-rY(nearLeft.y) ) * Math.abs(nearLeft.x-x) / Math.abs(nearLeft.x-nearRight.x)+rY(nearLeft.y);
+            //console.log(rY(nearLeft.y)," ", Math.abs(nearRight.x-x)," ",Math.abs(nearRight.x-nearLeft.x));
+          }
+          //y+=Math.max( 0, rY( Math.max(nearLeft.y,nearRight.y)) );
+          //console.log("Left",nearLeft.x,rY(nearLeft.y),"Right",nearRight.x,rY(nearRight.y));
+          //console.log(rY(nearLeft),shuttle.x, y);
+
+
+        }
+
         
+        this.indicator.clear();
+        this.indicator.beginFill(0xFFFF00);
+        this.indicator.drawRect(shuttle.x-shuttle.width/2,rY(y),shuttle.width,5);
+        //this.indicator.drawRect(shuttle.x,rY(y),5,5);
+        app.stage.addChild(this.indicator);
         
+        return rY(y);
+        // y = Y * x / X
+        //let y = rY(nearLeft.y) * Math.abs(nearRight.x-x) / Math.abs(nearRight.x-nearLeft.x);
+        //console.log(shuttle.x,rY(shuttle.y),y);
+        //console.log("До права",Math.abs(nearRight.x-x))
+        //console.log(y);
+      }
+      
+      // тру если норм, false если краш
+      checkColision(shuttle){
+        let y = rY(this.findPointY(shuttle.x));
+        if ( y-1>rY(shuttle.y) ){
+          //console.log("Crush!!!")
+          return false
+        }
+        else{
+          return true
+        }
+        //if( ){
+          
+        //}
+        //shuttle.height
       }
     }
 
@@ -127,7 +210,7 @@ function runFunction() {
     l = new Land();
     l.drawAll();
     app.stage.addChild(land);
-
+    return l
 
 
 
