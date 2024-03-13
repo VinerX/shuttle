@@ -1,12 +1,12 @@
 //visualization
-var acceleration = 0
-var angle = 127;
+var acceleration = 0.978
+var angle = 0.25;
 const shuttle = PIXI.Sprite.from('img/shuttle.png');
 var defaultX,defaultY = 0;
 const speed = { x: 0, y: 0 };
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
-    let app = new PIXI.Application({
+    app = new PIXI.Application({
         width: 1600,         // default: 800
         height: 1600,        // default: 600
         antialias: true,    // default: false
@@ -26,11 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
     shuttle.anchor.set(0.5, 0.5);
     defaultX = app.renderer.width / 2;
     defaultY = app.renderer.height - (shuttle.height/2);
-    shuttle.x = defaultX;
-    shuttle.y = defaultY;
-    console.log(shuttle.x,shuttle.y);
+    shuttle.x = 1; //defaultX;
+    shuttle.y = 444; //defaultY;
+    
+    //console.log(shuttle.x,shuttle.y);
+    
     const gravity = 0.98;
 
+    
+    // Дима - попытка в рисовку ланда
+    try {
+      land = createLand();
+    } catch (error) {
+      console.error(error);
+    }
+    
+
+    // Так понял что это тик времени
     app.ticker.add((delta) => {
         // Convert angle from degrees to radians and adjust by -90 degrees
         var angleInRadians = (angle) * (Math.PI / 180);
@@ -57,9 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
        // Rotate sprite based on original degree value minus offset
        shuttle.rotation = angleInRadians;
+
+      //Проверка колизии
+      if (!land.checkColision(shuttle)){
+        //console.log("Crush!!!")
+        app.ticker.stop();
+      };
     });
-    
-      
 
   
    } else {
