@@ -1,8 +1,9 @@
 //visualization
 var acceleration = 0.978
-var angle = 0.25;
+var angle = 0;
 const shuttle = PIXI.Sprite.from('img/shuttle.png');
-var defaultX,defaultY = 0;
+var defaultX  =600;
+var defaultY =204;
 const speed = { x: 0, y: 0 };
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
@@ -24,10 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Now you can start creating sprites and adding them to stage.
     app.stage.addChild(shuttle);
     shuttle.anchor.set(0.5, 0.5);
-    defaultX = app.renderer.width / 2;
-    defaultY = app.renderer.height - (shuttle.height/2);
-    shuttle.x = 1; //defaultX;
-    shuttle.y = 444; //defaultY;
+    shuttle.x = 600; //defaultX;
+    shuttle.y = 204; //defaultY;
     
     //console.log(shuttle.x,shuttle.y);
     
@@ -44,6 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Так понял что это тик времени
     app.ticker.add((delta) => {
+      //Проверка колизии
+      if (!land.checkColision(shuttle)) {
+        //console.log("Crush!!!")
+      }
+      else{
         // Convert angle from degrees to radians and adjust by -90 degrees
         var angleInRadians = (angle) * (Math.PI / 180);
         //gravity
@@ -69,12 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
        // Rotate sprite based on original degree value minus offset
        shuttle.rotation = angleInRadians;
-
-      //Проверка колизии
-      if (!land.checkColision(shuttle)){
-        //console.log("Crush!!!")
-        app.ticker.stop();
-      };
+      };  
     });
 
   

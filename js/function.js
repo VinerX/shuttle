@@ -166,12 +166,39 @@ function runFunction() {
         
         return rY(y);
       }
-      
+      findPlateau(x){
+        // Поиск ближайших точек
+        let nearLeft = this.points.at(0);
+        let nearRight = this.points.at(-1);
+        this.points.forEach(p => {
+          if (p.x<x){
+            if (p.x>=nearLeft.x){
+              nearLeft = p;
+            }
+          }
+          else{
+            if (p.x<=nearRight.x){
+              nearRight = p;
+            }
+          }
+        });  
+        if(nearRight.y==nearLeft.y) {
+          return 1 
+        }
+        else{
+          return 0
+        }     
+      }
       // тру если норм, false если краш  --- Нужно добавить условия успешной посадки
       checkColision(shuttle){
         let y = rY(this.findPointY(shuttle.x));
-        if ( y-1>rY(shuttle.y) ){
-          //console.log("Crush!!!")
+        if ( y-1>rY(shuttle.y)){
+            if ((speed.x <= 5) && (speed.y <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
+                console.log("Congradulations!!!");
+            }
+            else {
+                console.log("Crush!!!");
+            }
           return false
         }
         else{
