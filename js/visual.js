@@ -1,10 +1,14 @@
 //visualization
 var acceleration = 0.978
-var angle = 0;
+
+
+//Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle.png');
-var defaultX  =600;
+var angle = 0;
+var FuelUsage = 0;
+var defaultX =600;
 var defaultY =204;
-const speed = { x: 0, y: 0 };
+
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
     app = new PIXI.Application({
@@ -27,44 +31,49 @@ document.addEventListener('DOMContentLoaded', () => {
     shuttle.anchor.set(0.5, 0.5);
     shuttle.x = 600; //defaultX;
     shuttle.y = 204; //defaultY;
-    
-    //console.log(shuttle.x,shuttle.y);
+    shuttle.speedX = 0;
+    shuttle.speedY = 0;
+    shuttle.shuttleAngle = this.shuttleAngle;
+    shuttle.shuttleFuel = this.shuttleFuel;
+    console.log(shuttle.x,shuttle.y);
     
     const gravity = 0.98;
 
     
     // Дима - попытка в рисовку ланда
     try {
-      land = createLand();
+      land = startMissions(shuttle);
     } catch (error) {
       console.error(error);
     }
     
 
     // Так понял что это тик времени
+    
     app.ticker.add((delta) => {
       //Проверка колизии
       if (!land.checkColision(shuttle)) {
         //console.log("Crush!!!")
+        
       }
       else{
         // Convert angle from degrees to radians and adjust by -90 degrees
         var angleInRadians = (angle) * (Math.PI / 180);
         //gravity
-        speed.y += gravity * delta;
+        shuttle.speedY += gravity * delta;
     
         // Correct y speed calculation: positive should go down in screen coordinates, but we want up
-        speed.x += Math.sin(angleInRadians) * acceleration * delta;
-        speed.y -= Math.cos(angleInRadians) * acceleration * delta;
-    
-        let newX = shuttle.x + speed.x;
-        let newY = shuttle.y + speed.y;
+        shuttle.speedX += Math.sin(angleInRadians) * acceleration * delta;
+        shuttle.speedY -= Math.cos(angleInRadians) * acceleration * delta;
+        
+        let newX = shuttle.x + shuttle.speedX;
+        let newY = shuttle.y + shuttle.speedY;
     
         // Prevent shuttle from going below container height,
         if(newY >= app.renderer.height - (shuttle.height / 2)) {
             newY = app.renderer.height - (shuttle.height / 2);
-            speed.y = 0; // Reset vertical speed upon "landing"
-            speed.x *= 0.95; // Optionally apply horizontal friction
+            shuttle.speedY = 0; // Reset vertical speed upon "landing"
+            shuttle.speedX= 0.95; // Optionally apply horizontal friction
         }
     
        // Update sprite position with new values.
@@ -74,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
        // Rotate sprite based on original degree value minus offset
        shuttle.rotation = angleInRadians;
       };  
+      console.log( shuttle.speedY,acceleration,delta);
     });
 
   

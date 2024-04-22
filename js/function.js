@@ -8,10 +8,10 @@ window.onload = function() {
 
 function resetFunction() {
   editor.setValue(`function myFunction() {
-  let acceleration = 0;
-  let rotation = 0;
+  let fuelUsage = 0;
+  let angle = 0;
   //Your code here
-  return [acceleration, rotation];
+  return [fuelUsage, angle];
 }`);
 }
 
@@ -61,12 +61,13 @@ function runFunction() {
       document.getElementById("result").innerHTML = "Error: The second item must be between -90 and 90.";
       return;
     }
-    acceleration = result[0];
+    fuelUsage = result[0];
     angle = result[1];
-    shuttle.x = defaultX;
-    shuttle.y = defaultY;
-    speed.x = 0;
-    speed.y = 0;
+    //shuttle.x = defaultX;
+    //shuttle.y = defaultY;
+    //speed.x = 0;
+    //speed.y = 0;
+    land = startMissions(shuttle);
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
 
@@ -77,7 +78,7 @@ function runFunction() {
   //app.renderer.height 1600
   //app.renderer.width для соотношения 1600 
 
-  function createLand(){
+  function startMissions(shuttle){
     let land = new PIXI.Graphics();
     
     //Переворачивает y
@@ -110,11 +111,12 @@ function runFunction() {
     }
     
     class Land{
-      static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
+      //static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
       
-      
-      level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
-      points = this.level.concat( [new Point(app.renderer.width,0)] );
+      level = Mission.Missions[0].level;
+      // level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
+      //console.error("11");
+      points = level.concat( [new Point(app.renderer.width,0)] );
       indicator = new PIXI.Graphics();
       
       //Рисую линии и добавляю индикатор
@@ -193,7 +195,7 @@ function runFunction() {
       checkColision(shuttle){
         let y = rY(this.findPointY(shuttle.x));
         if ( y-1>rY(shuttle.y)){
-            if ((speed.x <= 5) && (speed.y <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
+            if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
                 console.log("Congradulations!!!");
             }
             else {
@@ -208,12 +210,72 @@ function runFunction() {
     }
 
 
+    class Mission{
+      
+
+
+      //Настройка старта шатла
+      shuttleX=1000;
+      shuttleY=200;
+      shuttleXSpeed=0;
+      shuttleYSpeed=0;
+      shuttleAngle=0;
+      shuttleFuel=600;
+
+      //Настройка поверхности
+      level = [];
+
+      constructor(shuttleX = 1000, shuttleY = 200, shuttleXSpeed = 0, shuttleYSpeed = 0, shuttleAngle = 0, shuttleFuel = 600, level) {
+        // Настройка старта шатла
+        //console.log(this.shuttleX,shuttleX);
+        this.shuttleX = shuttleX;
+        //console.log(this.shuttleX,shuttleX);
+        this.shuttleY = shuttleY;
+        this.shuttleXSpeed = shuttleXSpeed;
+        this.shuttleYSpeed = shuttleYSpeed;
+        this.shuttleAngle = shuttleAngle;
+        this.shuttleFuel = shuttleFuel;
+    
+        // Настройка поверхности
+        this.level = level;
+        
+      }
+      
+
+      static Missions = [ 
+        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        
+      ]
+
+
+      runMission(shuttle){
+        shuttle.x = this.shuttleX;
+        console.log("D",shuttle.x,shuttle.y);
+        
+        shuttle.y = this.shuttleY;
+        shuttle.speedX = this.shuttleXSpeed;
+        shuttle.speedY = this.shuttleYSpeed;
+        shuttle.shuttleAngle = this.shuttleAngle;
+        shuttle.shuttleFuel = this.shuttleFuel;
+      }
+      static runAllMissions(shuttle){
+        
+        Missions.forEach((m) => {
+          m.runMission(shuttle);
+        });
+      }
+
+    }
+    
+
+
     // Команда нарисовать
     land.lineStyle(5, 0xFF0000);
     l = new Land();
     app.stage.addChild(land);
     l.drawAll();
-    
+    Mission.Missions[0].runMission(shuttle);
     return l
 
 
