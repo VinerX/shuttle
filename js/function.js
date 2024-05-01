@@ -6,6 +6,7 @@ window.onload = function() {
   resetFunction();
 };
 
+//Кнопка сброса
 function resetFunction() {
   editor.setValue(`function myFunction() {
   let fuelUsage = 0;
@@ -15,9 +16,7 @@ function resetFunction() {
 }`);
 }
 
-
-
-
+//Кнопка запуска миссии
 function runFunction() {
   var userCode = editor.getValue();
     var userFunc;
@@ -73,20 +72,24 @@ function runFunction() {
 
 
 
+  
+
+
   // Dmitry Code
 
   //app.renderer.height 1600
   //app.renderer.width для соотношения 1600 
 
+
   function startMissions(shuttle){
     let land = new PIXI.Graphics();
     
-    //Переворачивает y
+    //Переворачивает y (Изначально он равен 0 вверху)
     function rY(y){
       return app.renderer.height-y
     }
 
-
+    //Обычный класс точки с x,y
     class Point{
       x;
       y;
@@ -96,12 +99,16 @@ function runFunction() {
       } 
       
     }
+
+    // Создает точку по проценту от размера области
     function percentPoint(x,y){
       p = new Point(x,y);
       p.x= Math.floor(app.renderer.width*x);
       p.y= Math.floor(app.renderer.height-app.renderer.height*y);
       return p;
     } 
+
+    // Создает левел из процентных точек (Более универсально)
     function levelFromPercentCoords(coords){
       level=[];
       coords.forEach(p => {
@@ -110,6 +117,7 @@ function runFunction() {
       return level;
     }
     
+    // Отвечает за линии земли и коллизию с ними
     class Land{
       //static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
       
@@ -140,7 +148,7 @@ function runFunction() {
           else{
             if (p.x<=nearRight.x){
               nearRight = p;
-            }
+            }H
           }
         });
 
@@ -184,9 +192,11 @@ function runFunction() {
             }
           }
         });  
+        // Это плато
         if(nearRight.y==nearLeft.y) {
           return 1 
         }
+        // Есть уклон
         else{
           return 0
         }     
@@ -195,10 +205,15 @@ function runFunction() {
       checkColision(shuttle){
         let y = rY(this.findPointY(shuttle.x));
         if ( y-1>rY(shuttle.y)){
+
+            // Успешная посадка
             if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
                 console.log("Congradulations!!!");
             }
+            // Неудачная посадка
             else {
+                //stage.app.removeChild(this.indicator);
+                //this.indicator.remove();
                 console.log("Crush!!!");
             }
           return false
@@ -209,7 +224,7 @@ function runFunction() {
       }
     }
 
-
+    // Отвечает за линии земли, стартовые условия марсохода в каждой миссии
     class Mission{
       
 
@@ -250,6 +265,17 @@ function runFunction() {
 
 
       runMission(shuttle){
+
+        //Стираю что осталось с предыдущей миссии
+        if (land =! null){
+          //app.stage.removeChild(land);
+          //land.destroy();
+          //app.stage.removeChild(this.indicator);
+          //this.indicator.destroy();
+        }
+        
+
+
         shuttle.x = this.shuttleX;
         console.log("D",shuttle.x,shuttle.y);
         
@@ -268,8 +294,6 @@ function runFunction() {
 
     }
     
-
-
     // Команда нарисовать
     land.lineStyle(5, 0xFF0000);
     l = new Land();
@@ -277,14 +301,5 @@ function runFunction() {
     l.drawAll();
     Mission.Missions[0].runMission(shuttle);
     return l
-
-
-
-
-
-
-
-
-
 
   }
