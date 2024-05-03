@@ -66,7 +66,7 @@ function runFunction() {
     //shuttle.y = defaultY;
     //speed.x = 0;
     //speed.y = 0;
-    land = MM.land;
+    MM.begin();
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
 
@@ -94,15 +94,17 @@ function runFunction() {
     
     //app.stage.addChild(indicator);
 
-    y; // Позиция y ПОД марсоходом
+    static y = 0; // Позиция y ПОД марсоходом
     land; // Совокупность линий
 
     //Основной блок рисовки с использованием всех вспомогательных функций и классов 
     update(){
-
+      
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
-      this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(this.y),this.shuttle.width,5);
+      this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
+      console.log(this.shuttle.x-this.shuttle.width/2,MissionManager.y,Point.rY(MissionManager.y),this.shuttle.width,5)
+      this.indicator.drawRect(15,15,50,50);
       
     }  
     get land(){
@@ -110,13 +112,18 @@ function runFunction() {
     }
     constructor(shuttle){
       this.shuttle = shuttle;
-      app.stage.addChild(this.indicator);
-      app.stage.addChild(this.Graf);
+      
       this.land = new Land();
       this.Graf.moveTo(0,height);
       this.Graf.lineStyle(5, 0xFF0000);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
+
+      Mission.Missions[0].runMission(shuttle);
+      app.stage.addChild(this.indicator);
+      app.stage.addChild(this.Graf);
       this.update();
+    }
+    begin(){
       Mission.Missions[0].runMission(shuttle);
     }
     
@@ -227,6 +234,7 @@ function runFunction() {
       // тру если норм, false если краш  --- Нужно добавить условия успешной посадки
       hasColision(shuttle){
         var y = Point.rY(this.findPointY(shuttle.x));
+        MissionManager.y = y;
         if ( y-1>Point.rY(shuttle.y)){
 
             // Успешная посадка

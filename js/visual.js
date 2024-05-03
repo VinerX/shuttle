@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       
       MM = new MissionManager(shuttle);
-
+      land = MM.land;
      
       
 
@@ -49,9 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
       app.ticker.add((delta) => {
         //Проверка колизии
         //land.update()
-        land = MM.land;
+        MM.update();
         if (land.hasColision(shuttle)) {
-          console.log("Collision")
+          console.log("Collision");
+          app.ticker.stop();
           
         }
         else{
