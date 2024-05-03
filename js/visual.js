@@ -1,6 +1,7 @@
 //visualization
-const acceleration = 0.978
-
+const acceleration = 0.978;
+const gravity = 0.98;
+var app;
 
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle.png');
@@ -35,9 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.speedY = 0;
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
-      console.log(shuttle.x,shuttle.y);
       
-      const gravity = 0.98;
+
 
       
       // Дима - попытка в рисовку ланда
@@ -53,8 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       app.ticker.add((delta) => {
         //Проверка колизии
-        if (!land.checkColision(shuttle)) {
-          //console.log("Crush!!!")
+        //land.update()
+        if (land.hasColision(shuttle)) {
+          console.log("Collision")
           
         }
         else{
@@ -84,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // Rotate sprite based on original degree value minus offset
         shuttle.rotation = angleInRadians;
         };  
-        //console.log( shuttle.speedY,acceleration,delta);
       });
 
     
