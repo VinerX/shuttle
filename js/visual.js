@@ -37,16 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
       
-
-
       
-      // Дима - попытка в рисовку ланда
-      try {
-        land = startMissions(shuttle);
-      } 
-      catch (error) {
-        console.error(error);
-      }
+      
+      MM = new MissionManager(shuttle);
+
+     
       
 
       // Так понял что это тик времени
@@ -54,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
       app.ticker.add((delta) => {
         //Проверка колизии
         //land.update()
+        land = MM.land;
         if (land.hasColision(shuttle)) {
           console.log("Collision")
           

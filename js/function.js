@@ -66,7 +66,7 @@ function runFunction() {
     //shuttle.y = defaultY;
     //speed.x = 0;
     //speed.y = 0;
-    land = startMissions(shuttle);
+    land = MM.land;
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
 
@@ -81,41 +81,65 @@ function runFunction() {
   //app.renderer.width для соотношения 1600 
 
 
-  function startMissions(shuttle){
-    let Graf = new PIXI.Graphics();
-    app.stage.addChild(Graf);
+  //Общие функции
+  //Переворачивает y (Изначально он равен 0 вверху)
+
+  height=1600;
+  width=1600;
+  class MissionManager{
+    Graf = new PIXI.Graphics();
+    shuttle;
     // Обозначение поверхности ровно под марсоходом
-    let indicator = new PIXI.Graphics();
-    app.stage.addChild(indicator);
+    indicator = new PIXI.Graphics();
+    
     //app.stage.addChild(indicator);
 
-    let y; // Позиция y ПОД марсоходом
-    let land; // Совокупность линий
+    y; // Позиция y ПОД марсоходом
+    land; // Совокупность линий
 
-    
-    
+    //Основной блок рисовки с использованием всех вспомогательных функций и классов 
+    update(){
 
-    //Переворачивает y (Изначально он равен 0 вверху)
-    function rY(y){
-      return app.renderer.height-y
+      this.indicator.clear();
+      this.indicator.beginFill(0xFFFF00);
+      this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(this.y),this.shuttle.width,5);
+      
+    }  
+    get land(){
+      return this.land;
     }
-
+    constructor(shuttle){
+      this.shuttle = shuttle;
+      app.stage.addChild(this.indicator);
+      app.stage.addChild(this.Graf);
+      this.land = new Land();
+      this.Graf.moveTo(0,height);
+      this.Graf.lineStyle(5, 0xFF0000);
+      this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
+      this.update();
+      Mission.Missions[0].runMission(shuttle);
+    }
+    
+    }
+  
     //Обычный класс точки с x,y
     class Point{
       x;
       y;
       constructor(x,y) {
         this.x=x;
-        this.y=rY(y);
+        this.y=Point.rY(y);
       } 
-      
+      static rY(y){
+        return height-y
+      }
     }
 
     // Создает точку по проценту от размера области
     function percentPoint(x,y){
       p = new Point(x,y);
-      p.x= Math.floor(app.renderer.width*x);
-      p.y= Math.floor(app.renderer.height-app.renderer.height*y);
+      p.x= Math.floor(width*x);
+      p.y= Math.floor(height-height*y);
       return p;
     } 
 
@@ -135,11 +159,12 @@ function runFunction() {
       level = Mission.Missions[0].level;
       // level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
       //console.error("11");
-      points = level.concat( [new Point(app.renderer.width,0)] );
+      points = level.concat( [new Point(width,0)] );
       
       // Ищу Y, который скорее всего не задан точкой.
       findPointY(x){
         // Поиск ближайших точек
+        var y;
         let nearLeft = this.points.at(0);
         let nearRight = this.points.at(-1);
         this.points.forEach(p => {
@@ -155,26 +180,27 @@ function runFunction() {
           }
         });
 
-        let y;
+        
         //Плато
         if (nearRight.y==nearLeft.y){
-          y = rY(nearLeft.y)
+          y = Point.rY(nearLeft.y)
         }
         else {
           //Спуск
           if (nearLeft.y<=nearRight.y){
-            y = ( rY(nearLeft.y)-rY(nearRight.y) ) * Math.abs(nearRight.x-x) / Math.abs(nearRight.x-nearLeft.x)+rY(nearRight.y);
+            y = ( Point.rY(nearLeft.y)-Point.rY(nearRight.y) ) * Math.abs(nearRight.x-x) / Math.abs(nearRight.x-nearLeft.x)+Point.rY(nearRight.y);
           }
           //подъем
           else{
-            y = ( rY(nearRight.y)-rY(nearLeft.y) ) * Math.abs(nearLeft.x-x) / Math.abs(nearLeft.x-nearRight.x)+rY(nearLeft.y);
+            y = ( Point.rY(nearRight.y)-Point.rY(nearLeft.y) ) * Math.abs(nearLeft.x-x) / Math.abs(nearLeft.x-nearRight.x)+Point.rY(nearLeft.y);
           }
         }
-        return rY(y);
+        return Point.rY(y);
       }
 
       findPlateau(x){
         // Поиск ближайших точек
+        var y;
         let nearLeft = this.points.at(0);
         let nearRight = this.points.at(-1);
         this.points.forEach(p => {
@@ -200,9 +226,8 @@ function runFunction() {
       }
       // тру если норм, false если краш  --- Нужно добавить условия успешной посадки
       hasColision(shuttle){
-        y = rY(this.findPointY(shuttle.x));
-        update();
-        if ( y-1>rY(shuttle.y)){
+        var y = Point.rY(this.findPointY(shuttle.x));
+        if ( y-1>Point.rY(shuttle.y)){
 
             // Успешная посадка
             if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
@@ -215,7 +240,7 @@ function runFunction() {
                 console.log("Crush!!!");
                 
             }
-          return yes
+          return true
         }
         else{
           
@@ -280,25 +305,4 @@ function runFunction() {
 
     }
     
-    //Основной блок рисовки с использованием всех вспомогательных функций и классов 
-    function update(){
 
-      indicator.clear();
-      indicator.beginFill(0xFFFF00);
-      indicator.drawRect(shuttle.x-shuttle.width/2,rY(y),shuttle.width,5);
-
-      
-    }  
-    
-
-    land = new Land();
-    Graf.moveTo(0,app.renderer.height);
-    Graf.lineStyle(5, 0xFF0000);
-    land.points.forEach((p) => Graf.lineTo(p.x,p.y) );
-    update();
-    Mission.Missions[0].runMission(shuttle);
-    
-    return land
-    
-
-  }
