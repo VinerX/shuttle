@@ -62,6 +62,7 @@ function runFunction() {
     }
     fuelUsage = result[0];
     angle = result[1];
+    app.ticker.start();
     //shuttle.x = defaultX;
     //shuttle.y = defaultY;
     //speed.x = 0;
@@ -103,8 +104,6 @@ function runFunction() {
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
-      console.log(this.shuttle.x-this.shuttle.width/2,MissionManager.y,Point.rY(MissionManager.y),this.shuttle.width,5)
-      this.indicator.drawRect(15,15,50,50);
       
     }  
     get land(){
