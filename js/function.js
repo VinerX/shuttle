@@ -5,14 +5,13 @@ editor.session.setMode("ace/mode/javascript");
 window.onload = function() {
   resetFunction();
 };
-let Valid = [0];
 //Кнопка сброса
 function resetFunction() {
   editor.setValue(`function myFunction() {
   let acceleration = 0;
   let angle = 0;
   //Your code here
-  return [fuelUsage, angle];
+  return [acceleration, angle];
 }`);
 }
 
@@ -60,6 +59,7 @@ function runFunction() {
       document.getElementById("result").innerHTML = "Error: The second item must be between -90 and 90.";
       return;
     }
+    validFunc = userFunc;
     acceleration = result[0];
     angle = result[1];
     app.ticker.start();

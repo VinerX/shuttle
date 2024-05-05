@@ -2,13 +2,15 @@
 var acceleration = 0.978;
 const gravity = 0.98;
 var app;
-
+let validFunc = new Function('console.log("hi!");return[0,0]');
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle.png');
 var angle = 0;
 var FuelUsage = 0;
 var defaultX =600;
 var defaultY =204;
+let funcResult = [0,0];
+let xSpeed, ySpeed = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
@@ -47,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Так понял что это тик времени
       
       app.ticker.add((delta) => {
+        funcResult = validFunc();
+        acceleration = funcResult[0];
+        angle = funcResult[1];
         //Проверка колизии
         //land.update()
         MM.update();
@@ -81,7 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
         // Rotate sprite based on original degree value minus offset
         shuttle.rotation = angleInRadians;
-        };  
+        }; 
+      xSpeed = shuttle.speedX;
+      ySpeed = shuttle.speedY; 
       });
 
     
