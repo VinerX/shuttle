@@ -92,7 +92,7 @@ function runFunction() {
     shuttle;
     // Обозначение поверхности ровно под марсоходом
     indicator = new PIXI.Graphics();
-    
+    text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
     //app.stage.addChild(indicator);
 
     static y = 0; // Позиция y ПОД марсоходом
@@ -104,7 +104,9 @@ function runFunction() {
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
-      
+      this.text.text = `X Speed ${ Math.round(this.shuttle.speedX) }
+      Y Speed ${ (this.shuttle.speedY) }`;
+
     }  
     get land(){
       return this.land;
@@ -120,6 +122,9 @@ function runFunction() {
       Mission.Missions[0].runMission(shuttle);
       app.stage.addChild(this.indicator);
       app.stage.addChild(this.Graf);
+      app.stage.addChild(this.text);
+      this.text.x = 0.8 * width;
+      this.text.y = 0.8 * Point.rY(height); 
       this.update();
     }
     begin(){
