@@ -1,5 +1,5 @@
 //visualization
-const acceleration = 0.978;
+var acceleration = 0.978;
 const gravity = 0.98;
 var app;
 
