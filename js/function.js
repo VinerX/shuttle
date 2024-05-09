@@ -1,7 +1,7 @@
 var editor = ace.edit("userFunction");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
-
+var missionIndex = 0;
 window.onload = function() {
   resetFunction();
 };
@@ -68,6 +68,7 @@ function runFunction() {
     //speed.x = 0;
     //speed.y = 0;
     MM.begin();
+    console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
 
@@ -88,6 +89,19 @@ function runFunction() {
   height=1600;
   width=1600;
   class MissionManager{
+    nextMission() {
+      missionIndex++;
+      if (missionIndex < Mission.Missions.length) {
+          Mission.Missions[missionIndex].runMission(this.shuttle);
+          this.Graf.clear();
+          this.Graf.moveTo(0, height);
+          this.Graf.lineStyle(5, 0xFF0000);
+          this.land = new Land();
+          this.land.points.forEach((p) => this.Graf.lineTo(p.x, p.y));
+      }
+  }
+  
+  
     Graf = new PIXI.Graphics();
     shuttle;
     // Обозначение поверхности ровно под марсоходом
@@ -119,7 +133,7 @@ function runFunction() {
       this.Graf.lineStyle(5, 0xFF0000);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
 
-      Mission.Missions[0].runMission(shuttle);
+      Mission.Missions[missionIndex].runMission(shuttle);
       app.stage.addChild(this.indicator);
       app.stage.addChild(this.Graf);
       app.stage.addChild(this.text);
@@ -128,7 +142,7 @@ function runFunction() {
       this.update();
     }
     begin(){
-      Mission.Missions[0].runMission(shuttle);
+      Mission.Missions[missionIndex].runMission(shuttle);
     }
     
     }
@@ -167,7 +181,10 @@ function runFunction() {
     class Land{
       //static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
       
-      level = Mission.Missions[0].level;
+      get level() {
+        return Mission.Missions[missionIndex].level;
+      }
+    
       // level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
       //console.error("11");
       points = level.concat( [new Point(width,0)] );
@@ -241,10 +258,12 @@ function runFunction() {
         MissionManager.y = y;
         if ( y-1>Point.rY(shuttle.y)){
 
-            // Успешная посадка
-            if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
-                console.log("Congradulations!!!");
-            }
+        // Успешная посадка
+        if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
+          console.log("Congratulations!!!");
+          MM.nextMission();
+        }
+
             // Неудачная посадка
             else {
                 //stage.app.removeChild(this.indicator);
@@ -293,6 +312,7 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0]  ] )),
         new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
         
       ]
