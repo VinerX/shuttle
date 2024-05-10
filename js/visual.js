@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       
       MM = new MissionManager(shuttle);
-      land = MM.land;
+     
      
       
 
@@ -55,12 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
         //Проверка колизии
         //land.update()
         MM.update();
-        if (land.hasColision(shuttle)) {
-          console.log("Collision");
-          app.ticker.stop();
+        if (MM.land.hasColision(shuttle)) {
+          console.log(MM.land+`Visual: Collision ${shuttle.x} ${ Point.rY(shuttle.y)}`);
+          if (!nextMissionFlag){
+            app.ticker.stop();
+          }
           
         }
-        else{
+        else  {
           // Convert angle from degrees to radians and adjust by -90 degrees
           var angleInRadians = (angle) * (Math.PI / 180);
           //gravity
@@ -79,13 +81,13 @@ document.addEventListener('DOMContentLoaded', () => {
               shuttle.speedY = 0; // Reset vertical speed upon "landing"
               shuttle.speedX= 0.95; // Optionally apply horizontal friction
           }
-      
-        // Update sprite position with new values.
-        shuttle.x = newX;
-        shuttle.y = newY;
-      
-        // Rotate sprite based on original degree value minus offset
-        shuttle.rotation = angleInRadians;
+        
+          // Update sprite position with new values.
+          shuttle.x = newX;
+          shuttle.y = newY;
+        
+          // Rotate sprite based on original degree value minus offset
+          shuttle.rotation = angleInRadians;
         }; 
       xSpeed = shuttle.speedX;
       ySpeed = shuttle.speedY; 

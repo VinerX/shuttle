@@ -2,6 +2,7 @@ var editor = ace.edit("userFunction");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
 var missionIndex = 0;
+var nextMissionFlag = false;
 window.onload = function() {
   resetFunction();
 };
@@ -91,6 +92,7 @@ function runFunction() {
   class MissionManager{
     nextMission() {
       missionIndex++;
+      
       if (missionIndex < Mission.Missions.length) {
           Mission.Missions[missionIndex].runMission(this.shuttle);
           this.Graf.clear();
@@ -99,7 +101,8 @@ function runFunction() {
           this.land = new Land();
           this.land.points.forEach((p) => this.Graf.lineTo(p.x, p.y));
       }
-  }
+      console.log(`${missionIndex} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
+    }
   
   
     Graf = new PIXI.Graphics();
@@ -121,6 +124,12 @@ function runFunction() {
       this.text.text = `X Speed ${ Math.round(this.shuttle.speedX) }
       Y Speed ${ (this.shuttle.speedY) }`;
 
+
+
+      if (nextMissionFlag){
+        MM.nextMission();
+        nextMissionFlag = false;
+      }
     }  
     get land(){
       return this.land;
@@ -252,29 +261,30 @@ function runFunction() {
           return 0
         }     
       }
-      // тру если норм, false если краш  --- Нужно добавить условия успешной посадки
+      // тру если норм, false если краш
       hasColision(shuttle){
+        
         var y = Point.rY(this.findPointY(shuttle.x));
+        //console.log("HasCol0:"+y,Point.rY(shuttle.y));
         MissionManager.y = y;
+        
+        //Y Поверхности оказывается выше шаттла (с учетом погрешности)
         if ( y-1>Point.rY(shuttle.y)){
+          console.log("HasCol1:"+y,Point.rY(shuttle.y));
+          // Успешная посадка
+          if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
+            console.log("Congratulations!!!");
+            nextMissionFlag = true;
+          }
 
-        // Успешная посадка
-        if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
-          console.log("Congratulations!!!");
-          MM.nextMission();
-        }
-
-            // Неудачная посадка
-            else {
-                //stage.app.removeChild(this.indicator);
-                //this.indicator.remove();
-                console.log("Crush!!!");
-                
-            }
+          // Неудачная посадка
+          else {
+              //this.indicator.remove();
+              console.log("Crush!!!");
+          }
           return true
         }
-        else{
-          
+        else  {
           return false
         }
       }
@@ -312,8 +322,8 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0]  ] )),
-        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        //new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0]  ] )),
+        new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]])   ),
         
       ]
 
