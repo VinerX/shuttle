@@ -42,20 +42,23 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.shuttleFuel = this.shuttleFuel;
       
       
-      
+      // Установка среды для шатла
       MM = new MissionManager(shuttle);
-     
-     
+          
       
-
-      // Так понял что это тик времени
-      
+      // Тик времени
       app.ticker.add((delta) => {
+
+        // Обработка функцией пользователя значений с получением значений угла и ускорения
         funcResult = validFunc();
         acceleration = funcResult[0];
         angle = funcResult[1];
-        //Проверка колизии
-        MM.update();
+
+
+        // Обновление среды (кроме шатла) в данной итерации 
+        MM.update(); 
+
+        //Проверка коллизии
         if (MM.land.hasColision(shuttle)) {
           console.log(MM.land+`Visual: Collision ${shuttle.x} ${ Point.rY(shuttle.y)}`);
           if (!nextMissionFlag){
@@ -90,15 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
           // Rotate sprite based on original degree value minus offset
           shuttle.rotation = angleInRadians;
         }; 
-      xSpeed = shuttle.speedX;
-      ySpeed = shuttle.speedY; 
+        xSpeed = shuttle.speedX;
+        ySpeed = shuttle.speedY; 
       });
 
     
     } 
-
-
-
 
     else {
       console.error("Could not find the '#pixi-container' element.");

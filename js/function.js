@@ -64,12 +64,8 @@ function runFunction() {
     acceleration = result[0];
     angle = result[1];
     app.ticker.start();
-    //shuttle.x = defaultX;
-    //shuttle.y = defaultY;
-    //speed.x = 0;
-    //speed.y = 0;
-    missionIndex = 0; // ТЕСТ
-    MM.begin();
+    missionIndex = 0; // При кнопке ран начинаю с первой миссии
+    MM.begin(); 
     console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
@@ -80,20 +76,13 @@ function runFunction() {
 
 
   // Dmitry Code
-
-  //app.renderer.height 1600
-  //app.renderer.width для соотношения 1600 
-
-
-  //Общие функции
-  //Переворачивает y (Изначально он равен 0 вверху)
-
   height=1600;
   width=1600;
   class MissionManager{
     nextMission() {
       missionIndex++;
       
+      // Если есть еще миссии
       if (missionIndex < Mission.Missions.length) {
           Mission.Missions[missionIndex].runMission(this.shuttle);
           this.Graf.clear();
@@ -124,14 +113,11 @@ function runFunction() {
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
-      this.text.text = `Mission ${missionIndex+1} Points ${this.land.points.lengh}
-      X ${Math.round(this.shuttle.x)}
-      Y ${Math.round(Point.rY(this.shuttle.y))}
-      X Speed ${ Math.round(this.shuttle.speedX) }
-      Y Speed ${ Math.round(this.shuttle.speedY) }
-      TEST ${MissionManager.y}
-      
-      
+      this.text.text = `Mission: ${missionIndex+1}/${Mission.Missions.length}
+      X: ${Math.round(this.shuttle.x)}
+      Y: ${Math.round(Point.rY(this.shuttle.y))}
+      X Speed: ${ Math.round(this.shuttle.speedX) }
+      Y Speed: ${ Math.round(this.shuttle.speedY) }
       `;
 
 
@@ -176,6 +162,7 @@ function runFunction() {
         this.x=x;
         this.y=Point.rY(y);
       } 
+      //Переворачивает y (Изначально он равен 0 вверху)
       static rY(y){
         return height-y
       }
