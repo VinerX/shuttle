@@ -135,7 +135,7 @@ function runFunction() {
       `;
 
 
-
+      //Проверяю был ли фоаг, и на этой итерации меняю всю среду
       if (nextMissionFlag){
         MM.nextMission();
         nextMissionFlag = false;
@@ -200,10 +200,11 @@ function runFunction() {
     
     // Отвечает за линии земли и коллизию с ними
     class Land{    
-      //Беру точки из миссии и добавляю точку x max y 0 справа
-      points;
+      //0,0 точка слева, затем беру точки из миссии, затем 0.0 справа
+      points=[new Point(0,0)];
       constructor() {
-        this.points = Mission.Missions[missionIndex].level.concat( [new Point(width,0)] );
+        this.points = this.points.concat( Mission.Missions[missionIndex].level)
+        this.points = this.points.concat( [new Point(width,0)] ); 
       }
       
       
@@ -279,7 +280,7 @@ function runFunction() {
         
         //Y Поверхности оказывается выше шаттла (с учетом погрешности)
         if ( y-1>Point.rY(shuttle.y)){
-          console.log("HasCol1:"+y,Point.rY(shuttle.y));
+          //console.log("HasCol1:"+y,Point.rY(shuttle.y));
           // Успешная посадка
           if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
             console.log("Congratulations!!!");
@@ -330,10 +331,10 @@ function runFunction() {
       
       // Все миссии
       static Missions = [ 
-        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.9,0.4]  ] )),
-        new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]])   ),
-        
+        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
+        new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
+        new Mission(500,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.9],[0.2,0.1],[0.2,0.4],[0.9,0.9]]),   ),
       ]
 
 

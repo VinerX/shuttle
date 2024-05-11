@@ -4,7 +4,7 @@ const gravity = 0.98;
 var app;
 let validFunc = new Function('console.log("hi!");return[0,0]');
 //Настройка шатла
-const shuttle = PIXI.Sprite.from('img/shuttle.png');
+const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 var angle = 0;
 var FuelUsage = 0;
 var defaultX =600;
@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
       // Now you can start creating sprites and adding them to stage.
       app.stage.addChild(shuttle);
+      shuttle.width = 128;
+      shuttle.height = 128;
       shuttle.anchor.set(0.5, 0.5);
       shuttle.x = 600; //defaultX;
       shuttle.y = 204; //defaultY;
@@ -53,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         acceleration = funcResult[0];
         angle = funcResult[1];
         //Проверка колизии
-        //land.update()
         MM.update();
         if (MM.land.hasColision(shuttle)) {
           console.log(MM.land+`Visual: Collision ${shuttle.x} ${ Point.rY(shuttle.y)}`);
