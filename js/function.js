@@ -102,6 +102,9 @@ function runFunction() {
           this.land = new Land();
           this.land.points.forEach((p) => {this.Graf.lineTo(p.x, p.y)});
       }
+      else{
+        app.ticker.stop();
+      }
       console.log(`${missionIndex} ${Mission.Missions.length} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
     }
   
@@ -121,7 +124,7 @@ function runFunction() {
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
-      this.text.text = `Mission ${missionIndex+1}
+      this.text.text = `Mission ${missionIndex+1} Points ${this.land.points.lengh}
       X ${Math.round(this.shuttle.x)}
       Y ${Math.round(Point.rY(this.shuttle.y))}
       X Speed ${ Math.round(this.shuttle.speedX) }
@@ -328,7 +331,7 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0.5,0.4],[0.7,0.4]  ] )),
+        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.9,0.4]  ] )),
         new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]])   ),
         
       ]
