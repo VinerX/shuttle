@@ -65,7 +65,7 @@ function runFunction() {
     angle = result[1];
     app.ticker.start();
     missionIndex = 0; // При кнопке ран начинаю с первой миссии
-    MM.begin(); 
+    MM.beginAgain(); 
     console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
   }
@@ -78,6 +78,7 @@ function runFunction() {
   // Dmitry Code
   height=1600;
   width=1600;
+  //Связующий класс, отвечающий за общее состояние выполнения миссий
   class MissionManager{
     nextMission() {
       missionIndex++;
@@ -86,9 +87,9 @@ function runFunction() {
       if (missionIndex < Mission.Missions.length) {
           Mission.Missions[missionIndex].runMission(this.shuttle);
           this.Graf.clear();
+          this.land = new Land();
           this.Graf.moveTo(0, height);
           this.Graf.lineStyle(5, 0xFF0000);
-          this.land = new Land();
           this.land.points.forEach((p) => {this.Graf.lineTo(p.x, p.y)});
       }
       else{
@@ -97,19 +98,19 @@ function runFunction() {
       console.log(`${missionIndex} ${Mission.Missions.length} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
     }
   
-  
+    // Графические объекты
     Graf = new PIXI.Graphics();
-    shuttle;
-    // Обозначение поверхности ровно под марсоходом
-    indicator = new PIXI.Graphics();
-    text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
-    //app.stage.addChild(indicator);
-    y = 0; // Позиция y ПОД марсоходом
+    shuttle; // Шатл, настроен в visual.js
+    explosion = PIXI.Sprite.from('img/explosion.png'); //Взрыв
+    indicator = new PIXI.Graphics(); // Обозначение поверхности ровно под марсоходом
+    text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});    // Текст с данными о шатле
+    y = 0; // Позиция y ландшафта  ПОД марсоходом
     land; // Совокупность линий
 
     //Основной блок рисовки с использованием всех вспомогательных функций и классов 
     update(){
       
+      this.explosion.visible = false;
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
@@ -127,9 +128,12 @@ function runFunction() {
         nextMissionFlag = false;
       }
     }  
+
     get land(){
       return this.land;
     }
+
+
     //Создание ММ и инициализация всего
     constructor(shuttle){
       Mission.Missions[0].runMission(shuttle);
@@ -139,19 +143,36 @@ function runFunction() {
       this.Graf.lineStyle(5, 0xFF0000);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
 
-      
+
       app.stage.addChild(this.indicator);
       app.stage.addChild(this.Graf);
       app.stage.addChild(this.text);
+
+      app.stage.addChild(this.explosion);
+      this.explosion.visible = false;
+
       this.text.x = 0.8 * width;
       this.text.y = 0.8 * Point.rY(height); 
       this.update();
     }
     
-    begin(){
+    beginAgain(){
       Mission.Missions[missionIndex].runMission(shuttle);
+      this.Graf.clear();
+      this.Graf.moveTo(0,height);
+      this.Graf.lineStyle(5, 0xFF0000);
+      this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
+
     }
-    
+    //Обработка взрыва
+    crush(){
+      this.explosion.visible = true;
+      this.explosion.width = this.shuttle.width;
+      this.explosion.height = this.shuttle.height;
+      this.explosion.x = this.shuttle.x-this.shuttle.width/2;
+      this.explosion.y = this.shuttle.y-this.shuttle.height/2;
+    }
+
     }
   
     //Обычный класс точки с x,y
@@ -187,7 +208,7 @@ function runFunction() {
     
     // Отвечает за линии земли и коллизию с ними
     class Land{    
-      //0,0 точка слева, затем беру точки из миссии, затем 0.0 справа
+      //0,0 точка слева, затем беру точки из миссии, затем 0,0 справа
       points=[new Point(0,0)];
       constructor() {
         this.points = this.points.concat( Mission.Missions[missionIndex].level)
@@ -232,7 +253,7 @@ function runFunction() {
         return Point.rY(y);
       }
       //Поиск плато
-      findPlateau(x){
+      isPlateu(x){
         // Сначала поиск ближайших точек
         var y;
         let nearLeft = this.points.at(0);
@@ -251,11 +272,11 @@ function runFunction() {
         });  
         // Это плато
         if(nearRight.y==nearLeft.y) {
-          return 1 
+          return true 
         }
         // Есть уклон
         else{
-          return 0
+          return false
         }     
       }
       // Проверка коллизиии тру если норм, false если краш
@@ -266,10 +287,10 @@ function runFunction() {
         MissionManager.y = y;
         
         //Y Поверхности оказывается выше шаттла (с учетом погрешности)
-        if ( y-1>Point.rY(shuttle.y)){
+        if ( y+(shuttle.height/2)-3>Point.rY(shuttle.y)){
           //console.log("HasCol1:"+y,Point.rY(shuttle.y));
           // Успешная посадка
-          if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.findPlateau(shuttle.x)==1)) {
+          if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.isPlateu(shuttle.x-shuttle.width/2)) && (this.isPlateu(shuttle.x)) && (this.isPlateu(shuttle.x+shuttle.width/2))) {
             console.log("Congratulations!!!");
             nextMissionFlag = true;
           }
@@ -278,6 +299,8 @@ function runFunction() {
           else {
               //this.indicator.remove();
               console.log("Crush!!!");
+              MM.crush();
+              
           }
           return true
         }
