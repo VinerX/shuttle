@@ -68,6 +68,7 @@ function runFunction() {
     //shuttle.y = defaultY;
     //speed.x = 0;
     //speed.y = 0;
+    missionIndex = 0; // ТЕСТ
     MM.begin();
     console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
@@ -99,9 +100,9 @@ function runFunction() {
           this.Graf.moveTo(0, height);
           this.Graf.lineStyle(5, 0xFF0000);
           this.land = new Land();
-          this.land.points.forEach((p) => this.Graf.lineTo(p.x, p.y));
+          this.land.points.forEach((p) => {this.Graf.lineTo(p.x, p.y)});
       }
-      console.log(`${missionIndex} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
+      console.log(`${missionIndex} ${Mission.Missions.length} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
     }
   
   
@@ -111,8 +112,7 @@ function runFunction() {
     indicator = new PIXI.Graphics();
     text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});
     //app.stage.addChild(indicator);
-
-    static y = 0; // Позиция y ПОД марсоходом
+    y = 0; // Позиция y ПОД марсоходом
     land; // Совокупность линий
 
     //Основной блок рисовки с использованием всех вспомогательных функций и классов 
@@ -121,8 +121,15 @@ function runFunction() {
       this.indicator.clear();
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
-      this.text.text = `X Speed ${ Math.round(this.shuttle.speedX) }
-      Y Speed ${ (this.shuttle.speedY) }`;
+      this.text.text = `Mission ${missionIndex+1}
+      X ${Math.round(this.shuttle.x)}
+      Y ${Math.round(Point.rY(this.shuttle.y))}
+      X Speed ${ Math.round(this.shuttle.speedX) }
+      Y Speed ${ Math.round(this.shuttle.speedY) }
+      TEST ${MissionManager.y}
+      
+      
+      `;
 
 
 
@@ -134,15 +141,16 @@ function runFunction() {
     get land(){
       return this.land;
     }
+    //Создание ММ и инициализация всего
     constructor(shuttle){
+      Mission.Missions[0].runMission(shuttle);
       this.shuttle = shuttle;
-      
       this.land = new Land();
       this.Graf.moveTo(0,height);
       this.Graf.lineStyle(5, 0xFF0000);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
 
-      Mission.Missions[missionIndex].runMission(shuttle);
+      
       app.stage.addChild(this.indicator);
       app.stage.addChild(this.Graf);
       app.stage.addChild(this.text);
@@ -150,6 +158,7 @@ function runFunction() {
       this.text.y = 0.8 * Point.rY(height); 
       this.update();
     }
+    
     begin(){
       Mission.Missions[missionIndex].runMission(shuttle);
     }
@@ -187,16 +196,13 @@ function runFunction() {
     }
     
     // Отвечает за линии земли и коллизию с ними
-    class Land{
-      //static firstLevelLand = levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]]);
-      
-      get level() {
-        return Mission.Missions[missionIndex].level;
+    class Land{    
+      //Беру точки из миссии и добавляю точку x max y 0 справа
+      points;
+      constructor() {
+        this.points = Mission.Missions[missionIndex].level.concat( [new Point(width,0)] );
       }
-    
-      // level = Land.firstLevelLand;//[new Point(55,50), percentPoint(0.5,0.5),percentPoint(0.6,0.2)];
-      //console.error("11");
-      points = level.concat( [new Point(width,0)] );
+      
       
       // Ищу Y, который скорее всего не задан точкой.
       findPointY(x){
@@ -234,9 +240,9 @@ function runFunction() {
         }
         return Point.rY(y);
       }
-
+      //Поиск плато
       findPlateau(x){
-        // Поиск ближайших точек
+        // Сначала поиск ближайших точек
         var y;
         let nearLeft = this.points.at(0);
         let nearRight = this.points.at(-1);
@@ -261,7 +267,7 @@ function runFunction() {
           return 0
         }     
       }
-      // тру если норм, false если краш
+      // Проверка коллизиии тру если норм, false если краш
       hasColision(shuttle){
         
         var y = Point.rY(this.findPointY(shuttle.x));
@@ -322,7 +328,7 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        //new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0,0]  ] )),
+        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0.5,0.4],[0.7,0.4]  ] )),
         new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0,0],[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]])   ),
         
       ]
@@ -337,6 +343,8 @@ function runFunction() {
         shuttle.speedY = this.shuttleYSpeed;
         shuttle.shuttleAngle = this.shuttleAngle;
         shuttle.shuttleFuel = this.shuttleFuel;
+        
+
       }
       static runAllMissions(shuttle){
         
