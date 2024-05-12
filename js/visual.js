@@ -16,7 +16,7 @@ const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 const flare = PIXI.Sprite.from('img/lens2.png');
 var defaultX =600;
 var defaultY =204;
-let xSpeed, ySpeed = 0;
+let xSpeed, ySpeed, pX1, pX2, pY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create a new PIXI Application
@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.speedY = 0;
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
+      shuttle.pX1=this.pX1;
+      shuttle.pX2=this.pX2;
+      shuttle.pY=this.pY;
       
       //Пламя под шатлом
       shuttle.addChild( flare);
@@ -116,7 +119,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }; 
         xSpeed = shuttle.speedX;
         ySpeed = shuttle.speedY; 
+        pX1=shuttle.pX1;
+        pX2=shuttle.pX2;
+        pY=shuttle.pY;
       });
+      
 
     
     } 
