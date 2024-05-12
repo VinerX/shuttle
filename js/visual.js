@@ -1,17 +1,20 @@
 //visualization
-var acceleration = 0.978;
+
 const gravity = 0.98;
-var app;
+//Работа с пользователем
+var acceleration = 0.978;
+var angle = 0;
+var FuelUsage = 0;
 let validFunc = new Function('console.log("hi!");return[0,0]');
+let funcResult = [0,0];
+//Приложение
+var app;
 var height=1600;
 var width=1600;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
-var angle = 0;
-var FuelUsage = 0;
 var defaultX =600;
 var defaultY =204;
-let funcResult = [0,0];
 let xSpeed, ySpeed = 0;
 
 document.addEventListener('DOMContentLoaded', () => {

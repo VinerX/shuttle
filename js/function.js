@@ -116,8 +116,8 @@ function runFunction() {
       this.text.text = `Mission: ${missionIndex+1}/${Mission.Missions.length}
       X: ${Math.round(this.shuttle.x)}
       Y: ${Math.round(Point.rY(this.shuttle.y))}
-      X Speed: ${ Math.round(this.shuttle.speedX) }
-      Y Speed: ${ Math.round(this.shuttle.speedY*-1) }
+      X Speed: ${ Math.round(this.shuttle.speedX*100)/100 }
+      Y Speed: ${ Math.round(this.shuttle.speedY*-100)/100 }
       `;
 
 
