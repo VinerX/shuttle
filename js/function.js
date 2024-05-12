@@ -217,11 +217,11 @@ function runFunction() {
     
     // Отвечает за линии земли и коллизию с ними
     class Land{    
-      //0,0 точка слева, затем беру точки из миссии, затем 0,0 справа
-      points=[new Point(0,0)];
+      // крайняя точка слева, затем беру точки из миссии, затем 0,0 справа
+      points=[new Point(-200,0)];
       constructor() {
         this.points = this.points.concat( Mission.Missions[missionIndex].level)
-        this.points = this.points.concat( [new Point(width,0)] ); 
+        this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
       
@@ -332,6 +332,9 @@ function runFunction() {
         }
         //Улет более чем на 25% границ справа или сверху
         else if(Point.rY(shuttle.y)>=1.25*height || shuttle.x<=-0.25*width || shuttle.x>=1.25*width){
+          MM.crush();
+          MM.text.text = `Crush Cause - you leave
+           land area`;
           console.log("Far distance");
           return true;
         } 
@@ -372,18 +375,33 @@ function runFunction() {
       
       // Все миссии
       static Missions = [ 
-        new Mission(1000,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        new Mission(200,500,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
-        new Mission(200,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
-        new Mission(500,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.9],[0.2,0.1],[0.2,0.4],[0.9,0.9]]),   ),
+        // Новые по концептам
+        new Mission(0.5,0.2,0,0,0,1600,levelFromPercentCoords( [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ])   ),
+        new Mission(0.25,0.3,0,0,0,1600,levelFromPercentCoords( [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ])   ),
+        new Mission(0.12,0.3,1,0,0,1600,levelFromPercentCoords( [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]] )   ),
+        //old missions
+        //new Mission(1000,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        //new Mission(200,500,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
+        //new Mission(200,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
+        //new Mission(500,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.9],[0.2,0.1],[0.2,0.4],[0.9,0.9]]),   ),
       ]
 
 
       runMission(shuttle){
 
         //Стираю что осталось с предыдущей миссии
-        shuttle.x = this.shuttleX;
-        shuttle.y = this.shuttleY;
+        if (this.shuttleX<=1){
+          shuttle.x = width*this.shuttleX;
+        }
+        else{
+          shuttle.x = this.shuttleX;
+        }
+        if (this.shuttleY<=1){
+          shuttle.y = width*this.shuttleY;
+        }
+        else{
+          shuttle.y = this.shuttleY;
+        }
         shuttle.speedX = this.shuttleXSpeed;
         shuttle.speedY = this.shuttleYSpeed;
         shuttle.shuttleAngle = this.shuttleAngle;

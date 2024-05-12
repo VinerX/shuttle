@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
           power=0;
           angle = funcResult[1];
         }
-
+    
         // Обновление среды (кроме шатла) в данной итерации 
         MM.update(); 
 
@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else  {
           // Convert angle from degrees to radians and adjust by -90 degrees
           var angleInRadians = (angle) * (Math.PI / 180);
+          shuttle.rotation = angleInRadians;
           //gravity
           shuttle.speedY += gravity * delta;
       
