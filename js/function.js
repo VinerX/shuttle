@@ -150,6 +150,8 @@ function runFunction() {
       app.stage.addChild(this.explosion);
       this.explosion.visible = false;
 
+      this.flareUpdate();
+
       this.text.x = 0.8 * width;
       this.text.y = 0.8 * Point.rY(height); 
       this.update();
@@ -170,6 +172,11 @@ function runFunction() {
       this.explosion.height = this.shuttle.height;
       this.explosion.x = this.shuttle.x-this.shuttle.width/2;
       this.explosion.y = this.shuttle.y-this.shuttle.height/2;
+    }
+    flareUpdate(){
+      //Тут будет настройка графики отображения пламени
+      //flare.alpha = (acceleration - 0) / (10 - 0); 
+
     }
 
     }
