@@ -13,6 +13,7 @@ var height=1600;
 var width=1600;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
+const flare = PIXI.Sprite.from('img/lens2.png');
 var defaultX =600;
 var defaultY =204;
 let xSpeed, ySpeed = 0;
@@ -47,7 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
       
-      
+      //Пламя под шатлом
+      shuttle.addChild( flare);
+      flare.anchor.x = 0.5;
+      flare.anchor.y = 0.2;
+
+
       // Установка среды для шатла
       MM = new MissionManager(shuttle);
           
@@ -57,6 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Обработка функцией пользователя значений с получением значений угла и ускорения
         funcResult = validFunc();
+
+        //Проверка топлива
         if(shuttle.shuttleFuel>0){
           power = funcResult[0];
           shuttle.shuttleFuel = shuttle.shuttleFuel-power;

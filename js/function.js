@@ -9,7 +9,7 @@ window.onload = function() {
 //Кнопка сброса
 function resetFunction() {
   editor.setValue(`function myFunction() {
-  let power = 0;
+  let power = 3.71;
   let angle = 0;
   //Your code here
   return [power, angle];
@@ -114,12 +114,13 @@ function runFunction() {
       this.indicator.beginFill(0xFFFF00);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
       this.text.text = `Mission: ${missionIndex+1}/${Mission.Missions.length}
+      Fuel: ${Math.round(this.shuttle.shuttleFuel*100)/100}
       X: ${Math.round(this.shuttle.x)}
       Y: ${Math.round(Point.rY(this.shuttle.y))}
       X Speed: ${ Math.round(this.shuttle.speedX*100)/100 }
       Y Speed: ${ Math.round(this.shuttle.speedY*-100)/100 }
       `;
-
+      this.flareUpdate();
 
       //Проверяю был ли фоаг, и на этой итерации меняю всю среду
       if (nextMissionFlag){
@@ -150,6 +151,9 @@ function runFunction() {
       app.stage.addChild(this.explosion);
       this.explosion.visible = false;
 
+      
+
+
       this.text.x = 0.8 * width;
       this.text.y = 0.8 * Point.rY(height); 
       this.update();
@@ -172,7 +176,12 @@ function runFunction() {
       this.explosion.x = this.shuttle.x-this.shuttle.width/2;
       this.explosion.y = this.shuttle.y-this.shuttle.height/2;
     }
-
+    flareUpdate(){
+      //Нормализация (val, max, min) => (val - min) / (max - min); 
+      //Тут будет настройка графики отображения пламени  
+      flare.alpha = 0.85+0.15*Math.random(1) //Math.round(power) )//(power - 0) / (3.71 - 0); 
+      flare.width = 1500*Math.round(power); 
+    }
     }
   
     //Обычный класс точки с x,y
@@ -363,10 +372,10 @@ function runFunction() {
       
       // Все миссии
       static Missions = [ 
-        new Mission(1000,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
-        new Mission(200,500,0,0,0,600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
-        new Mission(200,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
-        new Mission(500,200,0,0,0,600,levelFromPercentCoords( [[0.1,0.9],[0.2,0.1],[0.2,0.4],[0.9,0.9]]),   ),
+        new Mission(1000,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
+        new Mission(200,500,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
+        new Mission(200,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
+        new Mission(500,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.9],[0.2,0.1],[0.2,0.4],[0.9,0.9]]),   ),
       ]
 
 
