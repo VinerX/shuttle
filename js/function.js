@@ -76,8 +76,7 @@ function runFunction() {
 
 
   // Dmitry Code
-  height=1600;
-  width=1600;
+
   //Связующий класс, отвечающий за общее состояние выполнения миссий
   class MissionManager{
     nextMission() {
@@ -118,7 +117,7 @@ function runFunction() {
       X: ${Math.round(this.shuttle.x)}
       Y: ${Math.round(Point.rY(this.shuttle.y))}
       X Speed: ${ Math.round(this.shuttle.speedX) }
-      Y Speed: ${ Math.round(this.shuttle.speedY) }
+      Y Speed: ${ Math.round(this.shuttle.speedY*-1) }
       `;
 
 
@@ -285,7 +284,7 @@ function runFunction() {
         var y = Point.rY(this.findPointY(shuttle.x));
         //console.log("HasCol0:"+y,Point.rY(shuttle.y));
         MissionManager.y = y;
-        
+        console.log();
         //Y Поверхности оказывается выше шаттла (с учетом погрешности)
         if ( y+(shuttle.height/2)-3>Point.rY(shuttle.y)){
           //console.log("HasCol1:"+y,Point.rY(shuttle.y));
@@ -302,10 +301,15 @@ function runFunction() {
               MM.crush();
               
           }
-          return true
+          return true;
         }
+        //Улет более чем на 25% границ справа или сверху
+        else if(Point.rY(shuttle.y)>=1.25*height || shuttle.x<=-0.25*width || shuttle.x>=1.25*width){
+          console.log("Far distance");
+          return true;
+        } 
         else  {
-          return false
+          return false;
         }
       }
     }

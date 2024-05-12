@@ -3,6 +3,8 @@ var acceleration = 0.978;
 const gravity = 0.98;
 var app;
 let validFunc = new Function('console.log("hi!");return[0,0]');
+var height=1600;
+var width=1600;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 var angle = 0;
@@ -22,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         resolution: 1       // default: 1
       }
     );
-  
+    height=app.renderer.height;
+    width=app.renderer.width;
     //Add the canvas that Pixi automatically created for you to the HTML document
     let pixContainer = document.getElementById("shuttle-holder");
   
