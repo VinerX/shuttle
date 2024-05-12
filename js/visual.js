@@ -1,8 +1,8 @@
 //visualization
 
-const gravity = 0.98;
+const gravity = 3.71;
 //Работа с пользователем
-var acceleration = 0.978;
+var power = 0.978;
 var angle = 0;
 var FuelUsage = 0;
 let validFunc = new Function('console.log("hi!");return[0,0]');
@@ -57,9 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Обработка функцией пользователя значений с получением значений угла и ускорения
         funcResult = validFunc();
-        acceleration = funcResult[0];
-        angle = funcResult[1];
-
+        if(shuttle.shuttleFuel>0){
+          power = funcResult[0];
+          shuttle.shuttleFuel = shuttle.shuttleFuel-power;
+          angle = funcResult[1];
+        }
+        else{
+          power=0;
+          angle = funcResult[1];
+        }
 
         // Обновление среды (кроме шатла) в данной итерации 
         MM.update(); 
@@ -79,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
           shuttle.speedY += gravity * delta;
       
           // Correct y speed calculation: positive should go down in screen coordinates, but we want up
-          shuttle.speedX += Math.sin(angleInRadians) * acceleration * delta;
-          shuttle.speedY -= Math.cos(angleInRadians) * acceleration * delta;
+          shuttle.speedX += Math.sin(angleInRadians) * power * delta;
+          shuttle.speedY -= Math.cos(angleInRadians) * power * delta;
           
           let newX = shuttle.x + shuttle.speedX;
           let newY = shuttle.y + shuttle.speedY;

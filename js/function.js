@@ -9,10 +9,10 @@ window.onload = function() {
 //Кнопка сброса
 function resetFunction() {
   editor.setValue(`function myFunction() {
-  let acceleration = 0;
+  let power = 0;
   let angle = 0;
   //Your code here
-  return [acceleration, angle];
+  return [power, angle];
 }`);
 }
 
@@ -61,7 +61,7 @@ function runFunction() {
       return;
     }
     validFunc = userFunc;
-    acceleration = result[0];
+    power = result[0];
     angle = result[1];
     app.ticker.start();
     missionIndex = 0; // При кнопке ран начинаю с первой миссии
@@ -158,6 +158,7 @@ function runFunction() {
     beginAgain(){
       Mission.Missions[missionIndex].runMission(shuttle);
       this.Graf.clear();
+      this.land = new Land();
       this.Graf.moveTo(0,height);
       this.Graf.lineStyle(5, 0xFF0000);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
@@ -252,7 +253,7 @@ function runFunction() {
         return Point.rY(y);
       }
       //Поиск плато
-      isPlateu(x){
+      isPlateau(x){
         // Сначала поиск ближайших точек
         var y;
         let nearLeft = this.points.at(0);
@@ -288,18 +289,35 @@ function runFunction() {
         //Y Поверхности оказывается выше шаттла (с учетом погрешности)
         if ( y+(shuttle.height/2)-3>Point.rY(shuttle.y)){
           //console.log("HasCol1:"+y,Point.rY(shuttle.y));
-          // Успешная посадка
-          if ((shuttle.speedX <= 5) && (shuttle.speedY <= 5) && (angle < 10) && (angle > -10) && (this.isPlateu(shuttle.x-shuttle.width/2)) && (this.isPlateu(shuttle.x)) && (this.isPlateu(shuttle.x+shuttle.width/2))) {
+          // Неудачная посадка
+          if ((shuttle.speedX > 5)) {
+            console.log("Crush!!!");
+            MM.crush();
+            MM.text.text = `Crush Cause - the horizontal
+            speed was too high`;
+          }
+          if((shuttle.speedY > 5)){
+            console.log("Crush!!!");
+            MM.crush();
+            MM.text.text = `Crush Cause - the verical 
+            speed was too high`;
+          }
+          if((angle >= 10) || (angle <= -10)){
+            console.log("Crush!!!");
+            MM.crush();
+            MM.text.text = `Crush Cause - the angle
+            was too high`;
+          }
+          if(!(this.isPlateau(shuttle.x-shuttle.width/2)) || !(this.isPlateau(shuttle.x)) || !(this.isPlateau(shuttle.x+shuttle.width/2)))  {
+            console.log("Crush!!!");
+            MM.crush();
+            MM.text.text = `Crush Cause - you are
+            landing not on plateau`;
+          }
+          // Удачная посадка
+          else {
             console.log("Congratulations!!!");
             nextMissionFlag = true;
-          }
-
-          // Неудачная посадка
-          else {
-              //this.indicator.remove();
-              console.log("Crush!!!");
-              MM.crush();
-              
           }
           return true;
         }
