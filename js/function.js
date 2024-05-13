@@ -11,6 +11,16 @@ window.onload = function() {
 //Кнопка сброса
 function resetFunction() {
   editor.setValue(`function myFunction() {
+
+  //Readible sttings
+  let X = MM.getData(1);
+  let Y = MM.getData(2);
+  let Sx = MM.getData(3);
+  let Sy = MM.getData(4);
+  let Fuel = MM.getData(5);
+  let Points = MM.getData(6); //Array of points. 
+  //console.log(Points[1][0]); //Prints x of second (first visible) point in console
+  //customizable settings 
   let power = 3.71;
   let angle = 0;
   //Your code here
@@ -191,6 +201,21 @@ function runFunction() {
       flare.alpha = 0.85+0.15*Math.random(1) //Math.round(power) )//(power - 0) / (3.71 - 0); 
       flare.width = 1500*Math.round(power); 
     }
+
+    // Функция для пользователя, он получает только копии так что не может ничего менять
+    getData(data){
+      switch (data){
+      case 1: return this.shuttle.x;
+      case 2: return this.shuttle.y; 
+      case 3: return this.shuttle.speedX;
+      case 4: return this.shuttle.speedY; 
+      case 5: return this.shuttle.shuttleFuel; 
+      case 6: return this.land.pointsForUser();
+      default: console.error("Unsupposed value");
+      }
+      
+    }
+
     }
   
     //Обычный класс точки с x,y
@@ -233,6 +258,13 @@ function runFunction() {
         this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
+      pointsForUser(){
+        var newPoints = [];
+        this.points.forEach(p => {
+          newPoints.push( [p.x,p.y]);
+        });
+        return newPoints;
+      }
       
       // Ищу Y, который скорее всего не задан точкой.
       findPointY(x){
@@ -365,18 +397,12 @@ function runFunction() {
       shuttleYSpeed=0;
       shuttleAngle=0;
       shuttleFuel=600;
-      pX1=0;
-      pX2=0;
-      pY=0;
       //Настройка поверхности
       level = [];
 
 
-      constructor(shuttleX = 1000, shuttleY = 200, shuttleXSpeed = 0, shuttleYSpeed = 0, shuttleAngle = 0, shuttleFuel = 600, level, pX1, pX2, pY) {
+      constructor(shuttleX = 1000, shuttleY = 200, shuttleXSpeed = 0, shuttleYSpeed = 0, shuttleAngle = 0, shuttleFuel = 600, level) {
         // Настройка старта шатла
-        this.pX1=pX1;
-        this.pX2=pX2;
-        this.pY=pY;
         this.shuttleX = shuttleX;
         this.shuttleY = shuttleY;
         this.shuttleXSpeed = shuttleXSpeed;
@@ -391,11 +417,12 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         // Новые по концептам
-        new Mission(0.5,0.2,0,0,0,1600,levelFromPercentCoords( [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ]),0.4*width,0.6*width,0.4*height   ),
-        new Mission(0.25,0.3,0,0,0,1600,levelFromPercentCoords( [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ]),0.7*width,0.85*width,0.4*height   ),
-        new Mission(0.12,0.3,1,0,0,1600,levelFromPercentCoords( [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]] ),0.75*width,0.86*width,0.45*height   ),
-        new Mission(0.9,0.15,0,0,0,2600,levelFromPercentCoords( [[0,0.8],[0.2,0.8],[0.27,0.55],[0.4,0.45],[0.5,0.50],[0.6,0.65],[0.75,0.55],[0.9,0.67],[1,0.63] ]),0*width,0.2*width,0.8*height    ),
-        //old missions
+        new Mission(0.5,0.2,0,0,0,1600,levelFromPercentCoords( [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ])   ),
+        new Mission(0.25,0.3,0,0,0,1600,levelFromPercentCoords( [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ])   ),
+        new Mission(0.12,0.3,1,0,0,1600,levelFromPercentCoords( [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]] )   ),
+        new Mission(0.9,0.15,0,0,0,2600,levelFromPercentCoords( [[0,0.8],[0.2,0.8],[0.27,0.55],[0.4,0.45],[0.5,0.50],[0.6,0.65],[0.75,0.55],[0.9,0.67],[1,0.63] ])   ),
+        
+        //Старые
         //new Mission(1000,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
         //new Mission(200,500,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
         //new Mission(200,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.1],[0.2,0.1],[0.3,0.7],[0.5,0.7]]),   ),
