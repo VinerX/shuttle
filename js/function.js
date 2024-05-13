@@ -1,6 +1,8 @@
 var editor = ace.edit("userFunction");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
+let kaboom = new Audio('sound/kaboom.mp3');
+let theme = new Audio('sound/mars_wind.mp3');
 var missionIndex = 0;
 var nextMissionFlag = false;
 window.onload = function() {
@@ -160,6 +162,10 @@ function runFunction() {
     }
     
     beginAgain(){
+      theme.currentTime=0;
+      theme.play()
+      kaboom.pause();
+      kaboom.currentTime =0;
       Mission.Missions[missionIndex].runMission(shuttle);
       this.Graf.clear();
       this.land = new Land();
@@ -170,6 +176,9 @@ function runFunction() {
     }
     //Обработка взрыва
     crush(){
+      kaboom.volume=0.5;
+      kaboom.play();
+      theme.pause();
       this.explosion.visible = true;
       this.explosion.width = this.shuttle.width;
       this.explosion.height = this.shuttle.height;
