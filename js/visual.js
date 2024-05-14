@@ -5,33 +5,38 @@ const gravity = 3.71;
 var power = 0.978;
 var angle = 0;
 var FuelUsage = 0;
-let validFunc = new Function('console.log("hi!");return[0,0]');
+let validFunc = new Function('return[0,0]');
 let funcResult = [0,0];
 //Приложение
 var app;
-var height=1600;
-var width=1600;
+var height=700;
+var width=400;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 const flare = PIXI.Sprite.from('img/lens2.png');
-var defaultX =600;
-var defaultY =204;
+var defaultX =100;
+var defaultY =100;
 let xSpeed, ySpeed, pX1, pX2, pY = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
+  let pixContainer = document.getElementById("shuttle-holder");
     // Create a new PIXI Application
     app = new PIXI.Application({
-        width: 1600,         // default: 800
-        height: 1600,        // default: 600
-        antialias: true,    // default: false
-        transparent: false, // default: false
-        resolution: 1       // default: 1
-      }
-    );
-    height=app.renderer.height;
-    width=app.renderer.width;
-    //Add the canvas that Pixi automatically created for you to the HTML document
-    let pixContainer = document.getElementById("shuttle-holder");
+      width: pixContainer.clientWidth,
+      height: pixContainer.clientHeight,
+      antialias: true,
+      transparent: false,
+      resolution: 1
+    });
+    height = app.renderer.height;
+    width = app.renderer.width;
+    
+    // Resize the renderer when the container size changes
+    window.addEventListener('resize', function() {
+      app.renderer.resize(pixContainer.clientWidth, pixContainer.clientHeight);
+      height = app.renderer.height;
+      width = app.renderer.width;
+    });
   
     if(pixContainer) {
       pixContainer.appendChild(app.view);
@@ -41,8 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.width = 128;
       shuttle.height = 128;
       shuttle.anchor.set(0.5, 0.5);
-      shuttle.x = 600; //defaultX;
-      shuttle.y = 204; //defaultY;
+      shuttle.x = 100; //defaultX;
+      shuttle.y = 100; //defaultY;
       shuttle.speedX = 0;
       shuttle.speedY = 0;
       shuttle.shuttleAngle = this.shuttleAngle;

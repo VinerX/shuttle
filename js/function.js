@@ -303,7 +303,6 @@ function runFunction() {
         var y = Point.rY(this.findPointY(shuttle.x));
         //console.log("HasCol0:"+y,Point.rY(shuttle.y));
         MissionManager.y = y;
-        console.log();
         //Y Поверхности оказывается выше шаттла (с учетом погрешности)
         if ( y+(shuttle.height/2)-3>Point.rY(shuttle.y)){
           //console.log("HasCol1:"+y,Point.rY(shuttle.y));

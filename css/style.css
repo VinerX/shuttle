@@ -8,15 +8,13 @@ body {
   
   h2 {
     color: #e06c75;
-    text-align: center;
-    margin-top: 50px;
+    margin-top: 2vh;
   }
   
   #userFunction {
-    display: block;
-    width: 70%;
-    height: 200px;
-    margin: 20px auto;
+    display: inline-block; 
+    width:90%;
+    height:70%;
     padding: 10px;
     border: 1px solid #abb2bf;
     border-radius: 5px;
@@ -32,12 +30,16 @@ body {
     display: block;
     width: 200px;
     height: 40px;
-    margin: 20px auto;
+    margin-top: 2vh;
     background-color: #e06c75;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+  }
+  .usercode-buttons {
+    display:flex;
+    justify-content: space-around;
   }
   
   button:hover {
@@ -53,6 +55,31 @@ body {
     font-size: 16px;
     background-color: #282c34;
     color: #abb2bf;
+  }
+
+  .simulation-and-code {
+    display:flex;
+    justify-content: space-between;
+    height:55vh;
+  }
+  .usercode {
+    width: 51vw;
+    margin-left:2.5vw;
+  }
+  #shuttle-holder {
+    width:45vw;
+    margin-left:2vw;
+  }
+  .instructions-and-missions {
+    height:40vh;
+  }
+  .instructions {
+    display:block;
+    background-color: #3c424e;
+    width: 40vw;
+    height:inherit;
+    margin-left:2vw;
+    margin-bottom:2vh;
   }
 
   
