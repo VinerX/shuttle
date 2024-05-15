@@ -439,7 +439,7 @@ function runFunction() {
           shuttle.x = this.shuttleX;
         }
         if (this.shuttleY<=1){
-          shuttle.y = width*this.shuttleY;
+          shuttle.y = height*this.shuttleY;
         }
         else{
           shuttle.y = this.shuttleY;
