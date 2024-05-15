@@ -104,7 +104,7 @@ function runFunction() {
     shuttle; // Шатл, настроен в visual.js
     explosion = PIXI.Sprite.from('img/explosion.png'); //Взрыв
     indicator = new PIXI.Graphics(); // Обозначение поверхности ровно под марсоходом
-    text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'});    // Текст с данными о шатле
+    text = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 15, fill : 0xff1010, align : 'center'});    // Текст с данными о шатле
     y = 0; // Позиция y ландшафта  ПОД марсоходом
     land; // Совокупность линий
 
@@ -229,7 +229,6 @@ function runFunction() {
       // крайняя точка слева, затем беру точки из миссии, затем 0,0 справа
       points=[new Point(-200,0)];
       constructor() {
-        this.points = this.points.concat( Mission.Missions[missionIndex].level)
         this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
@@ -390,10 +389,10 @@ function runFunction() {
       // Все миссии
       static Missions = [ 
         // Новые по концептам
-        new Mission(0.5,0.2,0,0,0,1600,levelFromPercentCoords( [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ]),0.4*width,0.6*width,0.4*height   ),
-        new Mission(0.25,0.3,0,0,0,1600,levelFromPercentCoords( [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ]),0.7*width,0.85*width,0.4*height   ),
-        new Mission(0.12,0.3,1,0,0,1600,levelFromPercentCoords( [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]] ),0.75*width,0.86*width,0.45*height   ),
-        new Mission(0.9,0.15,0,0,0,2600,levelFromPercentCoords( [[0,0.8],[0.2,0.8],[0.27,0.55],[0.4,0.45],[0.5,0.50],[0.6,0.65],[0.75,0.55],[0.9,0.67],[1,0.63] ]),0*width,0.2*width,0.8*height    ),
+        new Mission(0.5,0.2,0,0,0,1600,  [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ],0.4*width,0.6*width,0.4*height   ),
+        new Mission(0.25,0.3,0,0,0,1600, [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ],0.7*width,0.85*width,0.4*height   ),
+        new Mission(0.12,0.3,1,0,0,1600, [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]] ,0.75*width,0.86*width,0.45*height   ),
+        new Mission(0.9,0.15,0,0,0,2600, [[0,0.8],[0.2,0.8],[0.27,0.55],[0.4,0.45],[0.5,0.50],[0.6,0.65],[0.75,0.55],[0.9,0.67],[1,0.63] ],0*width,0.2*width,0.8*height    ),
         //old missions
         //new Mission(1000,200,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.2,0.2],[0.3,0.7],[0.5,0.7]])   ),
         //new Mission(200,500,0,0,0,1600,levelFromPercentCoords( [[0.1,0.4],[0.9,0.4]  ] )),
@@ -403,7 +402,7 @@ function runFunction() {
 
 
       runMission(shuttle){
-
+        
         //Стираю что осталось с предыдущей миссии
         if (this.shuttleX<=1){
           shuttle.x = width*this.shuttleX;
