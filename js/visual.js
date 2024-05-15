@@ -9,8 +9,8 @@ let validFunc = new Function('return[0,0]');
 let funcResult = [0,0];
 //Приложение
 var app;
-var height=700;
-var width=400;
+var height;
+var width;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 const flare = PIXI.Sprite.from('img/lens2.png');
@@ -28,9 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
       transparent: false,
       resolution: 1
     });
-    height = app.renderer.height;
+    height = app.renderer.height;    
     width = app.renderer.width;
-    
+
     // Resize the renderer when the container size changes
     window.addEventListener('resize', function() {
       app.renderer.resize(pixContainer.clientWidth, pixContainer.clientHeight);
@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
       // Now you can start creating sprites and adding them to stage.
       app.stage.addChild(shuttle);
-      shuttle.width = 128;
-      shuttle.height = 128;
+      shuttle.width = height*0.15; // 15% От всей высоты размер шатла
+      shuttle.height = height*0.15;
       shuttle.anchor.set(0.5, 0.5);
       shuttle.x = 100; //defaultX;
       shuttle.y = 100; //defaultY;

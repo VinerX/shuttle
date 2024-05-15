@@ -229,6 +229,7 @@ function runFunction() {
       // крайняя точка слева, затем беру точки из миссии, затем 0,0 справа
       points=[new Point(-200,0)];
       constructor() {
+        this.points = this.points.concat( levelFromPercentCoords(Mission.Missions[missionIndex].level))
         this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
