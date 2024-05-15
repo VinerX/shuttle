@@ -132,6 +132,8 @@ function runFunction() {
       X Speed: ${ Math.round(this.shuttle.speedX*100)/100 }
       Y Speed: ${ Math.round(this.shuttle.speedY*-100)/100 }
       `;
+      this.text.x=0.8 * width;
+      this.text.y = 0.8 * Point.rY(height); 
       this.flareUpdate();
 
       //Проверяю был ли фоаг, и на этой итерации меняю всю среду
