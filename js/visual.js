@@ -7,6 +7,18 @@ var angle = 0;
 var FuelUsage = 0;
 let validFunc = new Function('return[0,0]');
 let funcResult = [0,0];
+// Для чтения пользователю
+//const X = parseInt(inputs[0]);
+//const Y = parseInt(inputs[1]);
+//const hSpeed = parseInt(inputs[2]); // the horizontal speed (in m/s), can be negative.
+//const vSpeed = parseInt(inputs[3]); // the vertical speed (in m/s), can be negative.
+//const fuel = parseInt(inputs[4]); // the quantity of remaining fuel in liters.
+//const rotate = parseInt(inputs[5]); // the rotation angle in degrees (-90 to 90).
+//const power = parseInt(inputs[6]); // the thrust power (0 to 4).
+
+
+
+
 //Приложение
 var app;
 var height;
@@ -14,9 +26,9 @@ var width;
 //Настройка шатла
 const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 const flare = PIXI.Sprite.from('img/lens2.png');
-var defaultX =100;
-var defaultY =100;
-let xSpeed, ySpeed, pX1, pX2, pY = 0;
+var defaultX =600;
+var defaultY =204;
+let xSpeed, ySpeed = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   let pixContainer = document.getElementById("shuttle-holder");
@@ -65,9 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // Установка среды для шатла
       MM = new MissionManager(shuttle);
           
-      
+      // Старт только по кнопке
+      app.ticker.stop();
       // Тик времени
       app.ticker.add((delta) => {
+        
+
 
         // Обработка функцией пользователя значений с получением значений угла и ускорения
         funcResult = validFunc();
