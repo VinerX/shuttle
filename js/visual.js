@@ -90,15 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
         funcResult = validFunc();
 
         //Проверка топлива
-        if(shuttle.shuttleFuel>0){
+        if(shuttle.shuttleFuel-power>0){
           power = funcResult[0];
-          shuttle.shuttleFuel = shuttle.shuttleFuel-power;
-          angle = funcResult[1];
         }
         else{
-          power=0;
-          angle = funcResult[1];
+          power=shuttle.shuttleFuel;
         }
+        shuttle.shuttleFuel = shuttle.shuttleFuel-power;
+        angle = funcResult[1];
     
         // Обновление среды (кроме шатла) в данной итерации 
         MM.update(); 

@@ -1,6 +1,7 @@
 var editor = ace.edit("userFunction");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/javascript");
+let perfectLanding = new Audio('sound/success.mp3');
 let kaboom = new Audio('sound/kaboom.mp3');
 let theme = new Audio('sound/mars_wind.mp3');
 var missionIndex = 0;
@@ -366,21 +367,20 @@ function runFunction() {
             MM.text.text = `Crush Cause - you are
             landing not on plateau`;
           }
+          else if(Point.rY(shuttle.y)>=1.25*height || shuttle.x<=-0.25*width || shuttle.x>=1.25*width){
+            MM.crush();
+            MM.text.text = `Crush Cause - you leave
+             land area`;
+            console.log("Far distance");
+          } 
           // Удачная посадка
           else {
+            perfectLanding.play();
             console.log("Congratulations!!!");
             nextMissionFlag = true;
           }
           return true;
         }
-        //Улет более чем на 25% границ справа или сверху
-        else if(Point.rY(shuttle.y)>=1.25*height || shuttle.x<=-0.25*width || shuttle.x>=1.25*width){
-          MM.crush();
-          MM.text.text = `Crush Cause - you leave
-           land area`;
-          console.log("Far distance");
-          return true;
-        } 
         else  {
           return false;
         }
