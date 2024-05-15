@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
       app.renderer.resize(pixContainer.clientWidth, pixContainer.clientHeight);
       height = app.renderer.height;
       width = app.renderer.width;
+      shuttle.width = height*0.15; // 15% От всей высоты размер шатла
+      shuttle.height = height*0.15;
     });
   
     if(pixContainer) {
