@@ -136,7 +136,7 @@ function runFunction() {
       `;
       this.text.x=0.8 * width;
       this.text.y = 0.8 * Point.rY(height); 
-      this.flareUpdate();
+      this.#flareUpdate();
 
       //Проверяю был ли фоаг, и на этой итерации меняю всю среду
       if (nextMissionFlag){
@@ -199,7 +199,7 @@ function runFunction() {
       this.explosion.x = this.shuttle.x-this.shuttle.width/2;
       this.explosion.y = this.shuttle.y-this.shuttle.height/2;
     }
-    flareUpdate(){
+    #flareUpdate(){
       //Нормализация (val, max, min) => (val - min) / (max - min); 
       //Тут будет настройка графики отображения пламени  
       flare.alpha = 0.85+0.15*Math.random(1) //Math.round(power) )//(power - 0) / (3.71 - 0); 

@@ -54,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.speedY = 0;
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
-      shuttle.pX1=this.pX1;
-      shuttle.pX2=this.pX2;
-      shuttle.pY=this.pY;
       
       //Пламя под шатлом
       shuttle.addChild( flare);
