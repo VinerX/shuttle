@@ -242,8 +242,6 @@ function runFunction() {
         return p;
       } 
     }
- 
-
     
     
     // Отвечает за линии земли и коллизию с ними
@@ -276,10 +274,7 @@ function runFunction() {
         newPoints.pop();
         return newPoints;
       }
-      
-      // Ищу Y, который скорее всего не задан точкой.
-      findPointY(x){
-        // Поиск ближайших точек
+      nearPoints(x){
         var y;
         let nearLeft = this.points.at(0);
         let nearRight = this.points.at(-1);
@@ -294,9 +289,17 @@ function runFunction() {
               nearRight = p;
             }
           }
-        });
+        });  
+        return [nearLeft,nearRight]
+      }
 
-        
+      // Ищу Y, который скорее всего не задан точкой.
+      findPointY(x){
+        // Поиск ближайших точек
+        var y;
+        var nearPoints = this.nearPoints(x);
+        let nearLeft = nearPoints[0];
+        let nearRight = nearPoints[1];        
         //Плато
         if (nearRight.y==nearLeft.y){
           y = Point.rY(nearLeft.y)
@@ -315,22 +318,10 @@ function runFunction() {
       }
       //Поиск плато
       isPlateau(x){
-        // Сначала поиск ближайших точек
         var y;
-        let nearLeft = this.points.at(0);
-        let nearRight = this.points.at(-1);
-        this.points.forEach(p => {
-          if (p.x<x){
-            if (p.x>=nearLeft.x){
-              nearLeft = p;
-            }
-          }
-          else{
-            if (p.x<=nearRight.x){
-              nearRight = p;
-            }
-          }
-        });  
+        var nearPoints = this.nearPoints(x);
+        let nearLeft = nearPoints[0];
+        let nearRight = nearPoints[1]; 
         // Это плато
         if(nearRight.y==nearLeft.y) {
           return true 
