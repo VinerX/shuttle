@@ -234,31 +234,36 @@ function runFunction() {
       static rY(y){
         return height-y
       }
+      // Создает точку по проценту от размера области
+      static percentPoint(x,y){
+        var p = new Point(x,y);
+        p.x= Math.floor(width*x);
+        p.y= Math.floor(height-height*y);
+        return p;
+      } 
     }
 
-    // Создает точку по проценту от размера области
-    function percentPoint(x,y){
-      p = new Point(x,y);
-      p.x= Math.floor(width*x);
-      p.y= Math.floor(height-height*y);
-      return p;
-    } 
+    
 
-    // Создает левел из процентных точек (Более универсально)
-    function levelFromPercentCoords(coords){
-      level=[];
-      coords.forEach(p => {
-        level.push( new percentPoint(p[0],p[1]));
-      });
-      return level;
-    }
+    
     
     // Отвечает за линии земли и коллизию с ними
     class Land{    
       // крайняя точка слева, затем беру точки из миссии, затем 0,0 справа
       points=[new Point(-200,0)];
+
+      // Создает левел из процентных точек (Более универсально)
+      levelFromPercentCoords(coords){
+        var level=[];
+        coords.forEach(p => {
+          level.push( Point.percentPoint(p[0],p[1]));
+        });
+        return level;
+      }
+
+
       constructor() {
-        this.points = this.points.concat( levelFromPercentCoords(Mission.Missions[missionIndex].level))
+        this.points = this.points.concat( this.levelFromPercentCoords(Mission.Missions[missionIndex].level))
         this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
