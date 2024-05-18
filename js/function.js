@@ -274,6 +274,7 @@ function runFunction() {
         newPoints.pop();
         return newPoints;
       }
+      //Находит ближайшие точки слева и справа и возвращает массивом
       nearPoints(x){
         var y;
         let nearLeft = this.points.at(0);
@@ -297,9 +298,7 @@ function runFunction() {
       findPointY(x){
         // Поиск ближайших точек
         var y;
-        var nearPoints = this.nearPoints(x);
-        let nearLeft = nearPoints[0];
-        let nearRight = nearPoints[1];        
+        let [nearLeft, nearRight] = this.nearPoints(x);      
         //Плато
         if (nearRight.y==nearLeft.y){
           y = Point.rY(nearLeft.y)
@@ -318,10 +317,7 @@ function runFunction() {
       }
       //Поиск плато
       isPlateau(x){
-        var y;
-        var nearPoints = this.nearPoints(x);
-        let nearLeft = nearPoints[0];
-        let nearRight = nearPoints[1]; 
+        let [nearLeft, nearRight] = this.nearPoints(x);   
         // Это плато
         if(nearRight.y==nearLeft.y) {
           return true 
@@ -333,7 +329,6 @@ function runFunction() {
       }
       // Проверка коллизиии тру если норм, false если краш
       hasColision(shuttle){
-        
         var y = Point.rY(this.findPointY(shuttle.x));
         //console.log("HasCol0:"+y,Point.rY(shuttle.y));
         MissionManager.y = y;
