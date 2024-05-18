@@ -242,8 +242,7 @@ function runFunction() {
         return p;
       } 
     }
-
-    
+ 
 
     
     
@@ -270,8 +269,11 @@ function runFunction() {
       pointsForUser(){
         var newPoints = [];
         this.points.forEach(p => {
-          newPoints.push( [p.x,p.y]);
+          newPoints.push( [p.x,Point.rY(p.y)]);
         });
+        // Убираю первый и последний элемент, так как они за пределами видимости.
+        newPoints.shift()
+        newPoints.pop();
         return newPoints;
       }
       
