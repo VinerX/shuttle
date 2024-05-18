@@ -140,9 +140,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }; 
         xSpeed = shuttle.speedX;
         ySpeed = shuttle.speedY; 
-        pX1=shuttle.pX1;
-        pX2=shuttle.pX2;
-        pY=shuttle.pY;
       });
       
 
