@@ -7,18 +7,6 @@ var angle = 0;
 var FuelUsage = 0;
 let validFunc = new Function('return[0,0]');
 let funcResult = [0,0];
-// Для чтения пользователю
-//const X = parseInt(inputs[0]);
-//const Y = parseInt(inputs[1]);
-//const hSpeed = parseInt(inputs[2]); // the horizontal speed (in m/s), can be negative.
-//const vSpeed = parseInt(inputs[3]); // the vertical speed (in m/s), can be negative.
-//const fuel = parseInt(inputs[4]); // the quantity of remaining fuel in liters.
-//const rotate = parseInt(inputs[5]); // the rotation angle in degrees (-90 to 90).
-//const power = parseInt(inputs[6]); // the thrust power (0 to 4).
-
-
-
-
 //Приложение
 var app;
 var height;
@@ -66,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
       shuttle.speedY = 0;
       shuttle.shuttleAngle = this.shuttleAngle;
       shuttle.shuttleFuel = this.shuttleFuel;
-      shuttle.pX1=this.pX1;
-      shuttle.pX2=this.pX2;
-      shuttle.pY=this.pY;
       
       //Пламя под шатлом
       shuttle.addChild( flare);
@@ -140,9 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }; 
         xSpeed = shuttle.speedX;
         ySpeed = shuttle.speedY; 
-        pX1=shuttle.pX1;
-        pX2=shuttle.pX2;
-        pY=shuttle.pY;
       });
       
 

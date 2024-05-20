@@ -136,7 +136,7 @@ function runFunction() {
       `;
       this.text.x=0.8 * width;
       this.text.y = 0.8 * Point.rY(height); 
-      this.flareUpdate();
+      this.#flareUpdate();
 
       //Проверяю был ли фоаг, и на этой итерации меняю всю среду
       if (nextMissionFlag){
@@ -199,7 +199,7 @@ function runFunction() {
       this.explosion.x = this.shuttle.x-this.shuttle.width/2;
       this.explosion.y = this.shuttle.y-this.shuttle.height/2;
     }
-    flareUpdate(){
+    #flareUpdate(){
       //Нормализация (val, max, min) => (val - min) / (max - min); 
       //Тут будет настройка графики отображения пламени  
       flare.alpha = 0.85+0.15*Math.random(1) //Math.round(power) )//(power - 0) / (3.71 - 0); 
@@ -234,45 +234,48 @@ function runFunction() {
       static rY(y){
         return height-y
       }
+      // Создает точку по проценту от размера области
+      static percentPoint(x,y){
+        var p = new Point(x,y);
+        p.x= Math.floor(width*x);
+        p.y= Math.floor(height-height*y);
+        return p;
+      } 
     }
-
-    // Создает точку по проценту от размера области
-    function percentPoint(x,y){
-      p = new Point(x,y);
-      p.x= Math.floor(width*x);
-      p.y= Math.floor(height-height*y);
-      return p;
-    } 
-
-    // Создает левел из процентных точек (Более универсально)
-    function levelFromPercentCoords(coords){
-      level=[];
-      coords.forEach(p => {
-        level.push( new percentPoint(p[0],p[1]));
-      });
-      return level;
-    }
+    
     
     // Отвечает за линии земли и коллизию с ними
     class Land{    
       // крайняя точка слева, затем беру точки из миссии, затем 0,0 справа
       points=[new Point(-200,0)];
+
+      // Создает левел из процентных точек (Более универсально)
+      levelFromPercentCoords(coords){
+        var level=[];
+        coords.forEach(p => {
+          level.push( Point.percentPoint(p[0],p[1]));
+        });
+        return level;
+      }
+
+
       constructor() {
-        this.points = this.points.concat( levelFromPercentCoords(Mission.Missions[missionIndex].level))
+        this.points = this.points.concat( this.levelFromPercentCoords(Mission.Missions[missionIndex].level))
         this.points = this.points.concat( [new Point(width+200,0)] ); 
       }
       
       pointsForUser(){
         var newPoints = [];
         this.points.forEach(p => {
-          newPoints.push( [p.x,p.y]);
+          newPoints.push( [p.x,Point.rY(p.y)]);
         });
+        // Убираю первый и последний элемент, так как они за пределами видимости.
+        newPoints.shift()
+        newPoints.pop();
         return newPoints;
       }
-      
-      // Ищу Y, который скорее всего не задан точкой.
-      findPointY(x){
-        // Поиск ближайших точек
+      //Находит ближайшие точки слева и справа и возвращает массивом
+      nearPoints(x){
         var y;
         let nearLeft = this.points.at(0);
         let nearRight = this.points.at(-1);
@@ -287,9 +290,15 @@ function runFunction() {
               nearRight = p;
             }
           }
-        });
+        });  
+        return [nearLeft,nearRight]
+      }
 
-        
+      // Ищу Y, который скорее всего не задан точкой.
+      findPointY(x){
+        // Поиск ближайших точек
+        var y;
+        let [nearLeft, nearRight] = this.nearPoints(x);      
         //Плато
         if (nearRight.y==nearLeft.y){
           y = Point.rY(nearLeft.y)
@@ -308,22 +317,7 @@ function runFunction() {
       }
       //Поиск плато
       isPlateau(x){
-        // Сначала поиск ближайших точек
-        var y;
-        let nearLeft = this.points.at(0);
-        let nearRight = this.points.at(-1);
-        this.points.forEach(p => {
-          if (p.x<x){
-            if (p.x>=nearLeft.x){
-              nearLeft = p;
-            }
-          }
-          else{
-            if (p.x<=nearRight.x){
-              nearRight = p;
-            }
-          }
-        });  
+        let [nearLeft, nearRight] = this.nearPoints(x);   
         // Это плато
         if(nearRight.y==nearLeft.y) {
           return true 
@@ -335,7 +329,6 @@ function runFunction() {
       }
       // Проверка коллизиии тру если норм, false если краш
       hasColision(shuttle){
-        
         var y = Point.rY(this.findPointY(shuttle.x));
         //console.log("HasCol0:"+y,Point.rY(shuttle.y));
         MissionManager.y = y;
