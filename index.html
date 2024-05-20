@@ -2,32 +2,49 @@
 <html>
 <head>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.1.0/pixi.min.js" as="script">
-    <link rel="stylesheet" href="css/style.css">   
+    <link rel="stylesheet" href="css/style.css">  
+    <link rel="icon" type="image/x-icon" href="favicon.ico"> 
+    <title>Mars Lander</title>
 </head>
 
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.1.0/pixi.min.js"></script>
-    <header>Mars Lander Game</header>
     <section class="simulation-and-code">
         <div id="shuttle-holder"></div>
         <div class="usercode">
             <h2>Enter Your Custom Function</h2>
 
             <div id="userFunction"></div>
-
-            <div class="usercode-buttons">
-                <button onclick="runFunction()">Run</button>
-                <button onclick="resetFunction()">Reset</button>
-            </div>
-
-            <p id="result"></p>
         </div>
     </section>
     <section class="instructions-and-missions">
         <div class="instructions">
-            <p style="margin:0;">Инструкции для прохождения</p>
+            <p style="margin:0;">Туториал по Марс Лэндру.<br>
+                Цель игры:<br>
+                Цель нашей игры заключается в написании программы, которая позволит посадить шаттл на различные поверхности во время симуляций, чтобы в  конце посадить настоящий шаттл вместе с первыми колонизаторами на настоящий Марс.<br>
+                <br>
+                Параметры игры:<br>
+                <br>
+                Горизонтальное положение шаттла вызывается с помощью MM.getData(1), вертикальная – MM.getData(2).<br>
+                Горизонтальная скорость шаттла вызывается с помощью MM.getData(3), вертикальная же - MM.getData(4).<br>
+                Угол наклона шаттла - angle, его  оставшееся топливо шаттла вызывается с помощью MM.getData(5) shuttle.shuttleFuel<br>
+                Угол наклона шаттла – angle, является одной из двух переменных, которые можно менять в вашей программе. Ограничен значениями между -90 и 90, влияет на направление силы от двигателя.<br>
+                Скорость шаттла зависит воздействия гравитации и направление силы двигателя, вызываемое “power”. Скорость ограничена значениями от 0 (бездействие) до 10 (максимальная мощь).<br>
+                Шаттл меняет свою модель поведения после вызова return с аргументами [power, angle]<br>
+                Гравитация планеты составляет 3.71 единица<br>
+                <br>
+                Параметры миссии:<br>
+                Геймплей игры разделен на миссии, которые проверят вашу программу на универсальность. В каждой миссии вы будете начинать из разных положений и пытаться приземлиться на разнообразные типы поверхностей. Поверхности состоят из точек, между которыми проведены линии. Расположение точек можно узнать через функцию MM.getData(6), которая возвращает список точек данной миссии. У каждой точки есть свое значение горизонтального и вертикального положения.<br>
+                На каждой миссии будет своеобразное плато, на которое нужно будет посадить шаттл. Плато это та часть поверхности марса между двумя соседними точками с одинаковым вертикальным положением.</p>
         </div>
-        <div class="missions"></div>
+        <div class="missions">
+            <div class="usercode-buttons">
+                <button onclick="runFunction()">Запустить миссии!</button>
+                <button onclick="resetFunction()">Очистить код</button>
+            </div>
+
+            <p id="result"></p>
+        </div>
     </section>
     <script src="ace-builds-1.5.0/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script src="js/visual.js"></script>

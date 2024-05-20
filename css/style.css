@@ -58,6 +58,8 @@ body {
   }
 
   .simulation-and-code {
+    margin-top:2.5vh;
+    margin-bottom: 1vh;
     display:flex;
     justify-content: space-between;
     height:55vh;
@@ -70,16 +72,27 @@ body {
     width:45vw;
     margin-left:2vw;
   }
+  
   .instructions-and-missions {
+    display:flex;
     height:40vh;
   }
   .instructions {
+    padding-right:1vw;
+    border: 2px solid black;
     display:block;
-    background-color: #3c424e;
-    width: 40vw;
+    background-color: #191b20;
+    width: 50vw;
     height:inherit;
     margin-left:2vw;
     margin-bottom:2vh;
+    overflow-y:scroll;
+  }
+  .missions {
+    margin-top:10vh;
+    margin-left:4vw;
+    width:40vw;
+    text-align: center;
   }
 
   
