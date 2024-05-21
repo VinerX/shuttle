@@ -4,6 +4,7 @@ editor.session.setMode("ace/mode/javascript");
 let perfectLanding = new Audio('sound/success.mp3');
 let kaboom = new Audio('sound/kaboom.mp3');
 let theme = new Audio('sound/mars_wind.mp3');
+let fanfare = new Audio('sound/fanfare.mp3');
 var missionIndex = 0;
 var nextMissionFlag = false;
 window.onload = function() {
@@ -107,6 +108,10 @@ function runFunction() {
       }
       else{
         app.ticker.stop();
+        fanfare.volume = 0.4;
+        fanfare.play();
+        alert('Вы прошли все миссии! Поздравляем! Вы - настоящий покоритель Марса.');
+        fanfare.pause();
       }
       console.log(`${missionIndex} ${Mission.Missions.length} mission has begun ${shuttle.x} ${Point.rY(shuttle.y)}`)
     }
