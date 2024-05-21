@@ -7,6 +7,7 @@ let theme = new Audio('sound/mars_wind.mp3');
 let fanfare = new Audio('sound/fanfare.mp3');
 var missionIndex = 0;
 var nextMissionFlag = false;
+let pixContainer = document.getElementById("background");
 window.onload = function() {
   resetFunction();
 };
@@ -80,6 +81,7 @@ function runFunction() {
     angle = result[1];
     app.ticker.start();
     missionIndex = 0; // При кнопке ран начинаю с первой миссии
+    background.style.zIndex = "1";
     MM.beginAgain(); 
     console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Функция принята. Выполняем симуляции... ";

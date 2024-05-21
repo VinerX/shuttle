@@ -68,9 +68,23 @@ body {
     width: 51vw;
     margin-left:2.5vw;
   }
-  #shuttle-holder {
+  .shuttle-holder {
     width:45vw;
     margin-left:2vw;
+  }
+  #shuttle-holder {
+    position:absolute;
+    width:45vw;
+    height:55vh;
+    z-index:2;
+  }
+  .background {
+    position:absolute;
+    z-index:3;
+    background-image:url('../img/MarsLand.jpg');
+    object-fit:fill;
+    width:45vw;
+    height:55vh;
   }
   
   .instructions-and-missions {
