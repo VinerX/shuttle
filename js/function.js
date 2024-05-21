@@ -21,7 +21,7 @@ function resetFunction() {
   let Sy = MM.getData(4);
   let Fuel = MM.getData(5);
   let Points = MM.getData(6); //Array of points. 
-  //console.log(Points[1][0]); //Prints x of the second (first visible) point in console
+  //console.log(Points[0][1]); //Prints y of the first point in console
   
   //customizable settings 
   let power = 3.71;

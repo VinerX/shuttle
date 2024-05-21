@@ -4,7 +4,6 @@ const gravity = 3.71;
 //Работа с пользователем
 var power = 0.978;
 var angle = 0;
-var FuelUsage = 0;
 let validFunc = new Function('return[0,0]');
 let funcResult = [0,0];
 //Приложение
@@ -16,7 +15,6 @@ const shuttle = PIXI.Sprite.from('img/shuttle2.png');
 const flare = PIXI.Sprite.from('img/lens2.png');
 var defaultX =600;
 var defaultY =204;
-let xSpeed, ySpeed = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
   let pixContainer = document.getElementById("shuttle-holder");
@@ -123,10 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Rotate sprite based on original degree value minus offset
           shuttle.rotation = angleInRadians;
         }; 
-        xSpeed = shuttle.speedX;
-        ySpeed = shuttle.speedY; 
       });
-      
 
     
     } 
