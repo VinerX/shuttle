@@ -28,8 +28,8 @@ body {
   
   button {
     display: block;
-    width: 200px;
-    height: 40px;
+    width: 15vw;
+    height: 5vh;
     margin-top: 2vh;
     background-color: #e06c75;
     color: #fff;
@@ -47,7 +47,7 @@ body {
   }
   
   #result {
-    width: 70%;
+    width: 90%;
     margin: 20px auto;
     padding: 10px;
     border: 1px solid #abb2bf;
@@ -75,10 +75,13 @@ body {
   
   .instructions-and-missions {
     display:flex;
-    height:40vh;
+    height:38vh;
   }
   .instructions {
     padding-right:1vw;
+    padding-left:1vw;
+    padding-top: 1vh;
+    padding-bottom:1vh;
     border: 2px solid black;
     display:block;
     background-color: #191b20;

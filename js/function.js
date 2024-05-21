@@ -41,12 +41,12 @@ function runFunction() {
       userFunc = new Function(`return ${userCode}`)();
       
     } catch (error) {
-      document.getElementById("result").innerHTML = "Compilation Error: " + error.message;
+      document.getElementById("result").innerHTML = "Ошибка компиляции: " + error.message;
       return;
     }
   
     if (typeof userFunc !== "function") {
-      document.getElementById("result").innerHTML = "Error: Input is not a function.";
+      document.getElementById("result").innerHTML = "Ошибка: введенный код не является функцией.";
       return;
     }
   
@@ -54,24 +54,24 @@ function runFunction() {
     try {
       result = userFunc();
     } catch (error) {
-      document.getElementById("result").innerHTML = "Execution Error: " + error.message;
+      document.getElementById("result").innerHTML = "Ошибка выполнения: " + error.message;
       return;
     }
   
     if (!Array.isArray(result) || result.length !== 2) {
-      document.getElementById("result").innerHTML = "Error: Function must return an array with two numbers.";
+      document.getElementById("result").innerHTML = "Ошибка: функция должна вернуть массив двух чисел.";
       return;
     }
     var a = result[0];
     var b = result[1];
   
     if (typeof a !== 'number' || a < 0 || a > 10) {
-      document.getElementById("result").innerHTML = "Error: The first item must be a number between 0 and 10.";
+      document.getElementById("result").innerHTML = "Ошибка: первый предмет массива должен быть между 0 и 10.";
       return;
     }
   
     if (typeof b !== 'number' || b < -90 || b > 90) {
-      document.getElementById("result").innerHTML = "Error: The second item must be between -90 and 90.";
+      document.getElementById("result").innerHTML = "Ошибка: второй предмет массива должен быть между -90 и 90.";
       return;
     }
     validFunc = userFunc;
@@ -81,7 +81,7 @@ function runFunction() {
     missionIndex = 0; // При кнопке ран начинаю с первой миссии
     MM.beginAgain(); 
     console.log('the mission has begun')
-    document.getElementById("result").innerHTML = "Function executed successfully. Result: " + result;
+    document.getElementById("result").innerHTML = "Функция принята. Выполняем симуляции... ";
   }
 
 
@@ -416,7 +416,7 @@ function runFunction() {
         // Новые по концептам
         new Mission(0.5,0.2,0,0,0,1600, [[0.0,0.5],[0.2,0.4],[0.3,0.55],[0.4,0.4],[0.6,0.4],[0.7,0.8],[0.8,0.7],[1,0.6] ]   ),
         new Mission(0.25,0.3,0,0,0,1600, [[0.0,0.4],[0.2,0.6],[0.3,0.45],[0.4,0.35],[0.6,0.4],[0.7,0.3],[0.85,0.3],[1,0.8] ]   ),
-        new Mission(0.12,0.3,1,0,0,1600, [[0.0,0.3],[0.1,0.3],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]]    ),
+        new Mission(0.12,0.3,1,0,0,1600, [[0.0,0.3],[0.1,0.31],[0.15,0.65],[0.25,0.55],[0.30,0.6],[0.37,0.79],[0.40,0.3],[0.45,0.1],[0.50,0.3],[0.65,0.6],[0.68,0.72],[0.71,0.5],[0.75,0.45],[0.86,0.45],[0.99,0.9]]    ),
         new Mission(0.9,0.15,0,0,0,2600, [[0,0.8],[0.2,0.8],[0.27,0.55],[0.4,0.45],[0.5,0.50],[0.6,0.65],[0.75,0.55],[0.9,0.67],[1,0.63] ]   ),
         
         //Старые
