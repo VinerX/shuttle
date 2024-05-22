@@ -354,29 +354,34 @@ function runFunction() {
         if ( y+(shuttle.height/2)-3>Point.rY(shuttle.y)){
           //console.log("HasCol1:"+y,Point.rY(shuttle.y));
           // Неудачная посадка
-          if ((shuttle.speedX > 5)) {
+          if ((shuttle.speedX > 5) || (shuttle.speedX <-5)) {
             console.log("Crush!!!");
             MM.crush();
-            MM.text.text = `Crush Cause - the horizontal
-            speed was too high`;
+            MM.text.text = `Crush Cause - the
+            horizontal
+            speed was 
+            too high`;
           }
           else if((shuttle.speedY > 5)){
             console.log("Crush!!!");
             MM.crush();
-            MM.text.text = `Crush Cause - the verical 
-            speed was too high`;
+            MM.text.text = `Crush Cause - the 
+            verical speed
+            was too high`;
           }
           else if((angle >= 10) || (angle <= -10)){
             console.log("Crush!!!");
             MM.crush();
-            MM.text.text = `Crush Cause - the angle
+            MM.text.text = `Crush Cause - 
+            the angle
             was too high`;
           }
           else if(!(this.isPlateau(shuttle.x-shuttle.width/2)) || !(this.isPlateau(shuttle.x)) || !(this.isPlateau(shuttle.x+shuttle.width/2)))  {
             console.log("Crush!!!");
             MM.crush();
-            MM.text.text = `Crush Cause - you are
-            landing not on plateau`;
+            MM.text.text = `Crush Cause - you 
+            are landing
+            not on plateau`;
           }
           // Удачная посадка
           else {
@@ -389,8 +394,9 @@ function runFunction() {
         //Улет более чем на 25% границ справа или сверху
         else if(Point.rY(shuttle.y)>=1.25*height || shuttle.x<=-0.25*width || shuttle.x>=1.25*width){
           MM.crush();
-          MM.text.text = `Crush Cause - you leave
-           land area`;
+          MM.text.text = `Crush Cause - you 
+          leave
+          land area`;
           console.log("Far distance");
           return true;
         } 
