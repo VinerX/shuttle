@@ -228,9 +228,9 @@ function runFunction() {
     getData(data){
       switch (data){
       case 1: return this.shuttle.x;
-      case 2: return this.shuttle.y; 
+      case 2: return Point.rY(this.shuttle.y); 
       case 3: return this.shuttle.speedX;
-      case 4: return this.shuttle.speedY; 
+      case 4: return -1*this.shuttle.speedY; 
       case 5: return this.shuttle.shuttleFuel; 
       case 6: return this.land.pointsForUser();
       default: console.error("Unsupposed value");
@@ -362,7 +362,7 @@ function runFunction() {
             speed was 
             too high`;
           }
-          else if((shuttle.speedY > 5)){
+          else if((shuttle.speedY < -5)){
             console.log("Crush!!!");
             MM.crush();
             MM.text.text = `Crush Cause - the 
