@@ -8,8 +8,19 @@ let fanfare = new Audio('sound/fanfare.mp3');
 var missionIndex = 0;
 var nextMissionFlag = false;
 let pixContainer = document.getElementById("background");
+function saveCodeToLocalStorage() {
+  var userCode = editor.getValue();
+  localStorage.setItem('userCode', userCode);
+}
 window.onload = function() {
-  resetFunction();
+  var savedCode = localStorage.getItem('userCode');
+  if (savedCode) {
+    editor.setValue(savedCode);
+  }
+  else {
+    resetFunction();
+  }
+  setInterval(saveCodeToLocalStorage, 5000);
 };
 //Кнопка сброса
 function resetFunction() {
@@ -35,8 +46,8 @@ function resetFunction() {
 //Кнопка запуска миссии
 function runFunction() {
   var userCode = editor.getValue();
+    saveCodeToLocalStorage();
     var userFunc;
-  
     
 
     try {
@@ -81,7 +92,7 @@ function runFunction() {
     angle = result[1];
     app.ticker.start();
     missionIndex = 0; // При кнопке ран начинаю с первой миссии
-    background.style.zIndex = "1";
+    background.style.display = "none";
     MM.beginAgain(); 
     console.log('the mission has begun')
     document.getElementById("result").innerHTML = "Функция принята. Выполняем симуляции... ";
@@ -105,7 +116,7 @@ function runFunction() {
           this.Graf.clear();
           this.land = new Land();
           this.Graf.moveTo(0, height);
-          this.Graf.lineStyle(5, 0xFF0000);
+          this.Graf.lineStyle(5, 0xCC1E2C);
           this.land.points.forEach((p) => {this.Graf.lineTo(p.x, p.y)});
       }
       else{
@@ -132,7 +143,7 @@ function runFunction() {
       
       this.explosion.visible = false;
       this.indicator.clear();
-      this.indicator.beginFill(0xFFFF00);
+      this.indicator.beginFill(0x1ECCBE);
       this.indicator.drawRect(this.shuttle.x-this.shuttle.width/2,Point.rY(MissionManager.y),this.shuttle.width,5);
       this.text.text = `Mission: ${missionIndex+1}/${Mission.Missions.length}
       Fuel: ${Math.round(this.shuttle.shuttleFuel*100)/100}
@@ -163,7 +174,7 @@ function runFunction() {
       this.shuttle = shuttle;
       this.land = new Land();
       this.Graf.moveTo(0,height);
-      this.Graf.lineStyle(5, 0xFF0000);
+      this.Graf.lineStyle(5, 0xCC1E2C);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
 
 
@@ -191,13 +202,13 @@ function runFunction() {
       this.Graf.clear();
       this.land = new Land();
       this.Graf.moveTo(0,height);
-      this.Graf.lineStyle(5, 0xFF0000);
+      this.Graf.lineStyle(5, 0xCC1E2C);
       this.land.points.forEach((p) => this.Graf.lineTo(p.x,p.y) );
 
     }
     //Обработка взрыва
     crush(){
-      kaboom.volume=0.5;
+      kaboom.volume=0.4;
       kaboom.play();
       theme.pause();
       this.explosion.visible = true;
