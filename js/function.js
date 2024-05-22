@@ -26,19 +26,19 @@ window.onload = function() {
 function resetFunction() {
   editor.setValue(`function myFunction() {
 
-  //Readible sttings
+  //Читаемые переменные.
   let X = MM.getData(1);
   let Y = MM.getData(2);
   let Sx = MM.getData(3);
   let Sy = MM.getData(4);
   let Fuel = MM.getData(5);
-  let Points = MM.getData(6); //Array of points. 
-  //console.log(Points[0][1]); //Prints y of the first point in console
+  let Points = MM.getData(6); //Массив координат точек. 
+  //Пример: Points[0][1] - Значение координаты Y первой точки.
   
-  //customizable settings 
+  //Настраиываемые переменные.
   let power = 3.71;
   let angle = 0;
-  //Your code here
+  //Ваш код. Удачи!
   return [power, angle];
 }`);
 }
