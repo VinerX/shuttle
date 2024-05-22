@@ -96,7 +96,7 @@ body {
     position: absolute;
     z-index: 3;
     overflow: hidden;
-    perspective: 1000px; /* Add perspective for 3D effect */
+    perspective: 1000px; 
     border: 3px solid black;
   }
 
@@ -106,10 +106,10 @@ body {
     width: 45vw;
     height: 54vh;
     animation: flicker 5s infinite;
-    transform: rotateX(10deg) rotateY(0deg); /* Add 3D rotation */
-    transform-style: preserve-3d; /* Preserve 3D transformations */
-    border-radius: 20px; /* Add border radius for curved edges */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); /* Add shadow for depth */
+    transform: rotateX(10deg) rotateY(0deg); 
+    transform-style: preserve-3d; 
+    border-radius: 20px; 
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); 
   }
 
   @keyframes flicker {
@@ -185,7 +185,7 @@ body {
     margin-bottom:2vh;
     overflow-y:scroll;
     z-index: 5;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); /* Add shadow for depth */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); 
     scrollbar-width: auto;
     scrollbar-color: grey black;
   }
