@@ -25,6 +25,8 @@ body {
     color: #abb2bf;
     overflow: auto;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    scrollbar-width: auto;
+    scrollbar-color: grey black;
   }
   #userFunction .ace_selection {
     background-color: rgba(22,116,90,0.3) !important;
@@ -184,6 +186,8 @@ body {
     overflow-y:scroll;
     z-index: 5;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.8); /* Add shadow for depth */
+    scrollbar-width: auto;
+    scrollbar-color: grey black;
   }
   .redtext {
     font-weight: 600;
