@@ -81,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         shuttle.shuttleFuel = shuttle.shuttleFuel-power;
         angle = funcResult[1];
-    
         // Обновление среды (кроме шатла) в данной итерации 
         MM.update(); 
 
