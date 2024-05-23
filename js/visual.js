@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
       // Now you can start creating sprites and adding them to stage.
       app.stage.addChild(shuttle);
-      shuttle.width = height*0.15; // 15% От всей высоты размер шатла
-      shuttle.height = height*0.15;
+      shuttle.width = Math.min(height,width)*0.12; 
+      shuttle.height = Math.min(height,width)*0.12;
       shuttle.anchor.set(0.5, 0.5);
       shuttle.x = 100; //defaultX;
       shuttle.y = 100; //defaultY;
